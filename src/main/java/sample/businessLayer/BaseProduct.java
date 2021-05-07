@@ -17,14 +17,16 @@ public class BaseProduct extends MenuItem{
         this.sodium = sodium;
         this.price = price;
     }
-
-    public String getTitle() {
-        return title;
+    public BaseProduct(String[] arguments){
+        this.title=arguments[0];
+        this.rating=Double.parseDouble(arguments[1]);
+        this.calories=Integer.parseInt(arguments[2]);
+        this.protein=Integer.parseInt(arguments[3]);
+        this.fat=Integer.parseInt(arguments[4]);
+        this.sodium=Integer.parseInt(arguments[5]);
+        this.price=Double.parseDouble(arguments[6]);
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public double getRating() {
         return rating;
@@ -64,6 +66,14 @@ public class BaseProduct extends MenuItem{
 
     public void setSodium(int sodium) {
         this.sodium = sodium;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public double getPrice() {

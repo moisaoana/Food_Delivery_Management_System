@@ -1,5 +1,7 @@
 package sample.businessLayer;
 
-public abstract class MenuItem {
+import java.io.Serializable;
+
+public abstract class MenuItem implements Serializable {
     public abstract double computePrice();
 }

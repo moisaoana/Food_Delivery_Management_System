@@ -1,16 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="titleLabel" prefHeight="485.0" prefWidth="570.0" style="-fx-background-color: darkseagreen;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.presentationLayer.ClientController">
+<AnchorPane prefHeight="592.0" prefWidth="810.0" style="-fx-background-color: darkseagreen;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.presentationLayer.ClientController">
    <children>
-      <Label layoutX="188.0" layoutY="14.0" text="Client Profile" textFill="WHITE">
+      <Label fx:id="titleLabel" layoutX="220.0" layoutY="14.0" prefHeight="10.0" prefWidth="224.0" text="Client Profile" textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="29.0" />
          </font>
       </Label>
+      <TableView fx:id="menuTableView" layoutX="20.0" layoutY="105.0" prefHeight="142.0" prefWidth="696.0">
+        <columns>
+          <TableColumn fx:id="titleColumn" prefWidth="217.5" text="Title" />
+          <TableColumn fx:id="ratingColumn" prefWidth="71.0" text="Rating" />
+            <TableColumn fx:id="caloriesColumn" prefWidth="72.5" text="Calories" />
+            <TableColumn fx:id="proteinColumn" minWidth="0.0" prefWidth="67.0" text="Protein" />
+            <TableColumn fx:id="fatColumn" prefWidth="58.0" text="Fat" />
+            <TableColumn fx:id="sodiumColumn" prefWidth="84.0" text="Sodium" />
+            <TableColumn fx:id="priceColumn" prefWidth="65.5" text="Price" />
+        </columns>
+      </TableView>
+      <TableView fx:id="composedTableView" layoutX="14.0" layoutY="304.0" prefHeight="154.0" prefWidth="717.0">
+        <columns>
+          <TableColumn fx:id="composedTitleColumn" prefWidth="223.5" text="Title" />
+          <TableColumn fx:id="composedPriceColumn" minWidth="1.5" prefWidth="59.0" text="Price" />
+            <TableColumn fx:id="compositionComposedColumn" prefWidth="358.5" text="Composition" />
+        </columns>
+      </TableView>
+      <Label fx:id="menuLabel" layoutX="14.0" layoutY="66.0" style="-fx-border-color: darksalmon; -fx-border-width: 5;" text="BASIC MENU ITMES" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="orderLabel" layoutX="20.0" layoutY="465.0" style="-fx-border-color: darksalmon; -fx-border-width: 5;" text="ORDER" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="specialMenuLabel" layoutX="14.0" layoutY="265.0" style="-fx-border-color: darksalmon; -fx-border-width: 5;" text="SPECIAL MENU ITEMS" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="18.0" />
+         </font>
+      </Label>
+      <TableView fx:id="orderTableView" layoutX="8.0" layoutY="504.0" prefHeight="131.0" prefWidth="430.0">
+        <columns>
+          <TableColumn fx:id="orderTitleColumn" prefWidth="267.5" text="Title" />
+          <TableColumn fx:id="orderPriceColumn" minWidth="0.0" prefWidth="79.5" text="Price" />
+        </columns>
+      </TableView>
+      <Button fx:id="orderButton" layoutX="506.0" layoutY="570.0" mnemonicParsing="false" onAction="#clickOrder" style="-fx-background-color: darksalmon;" text="ORDER" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="16.0" />
+         </font>
+      </Button>
+      <TextField fx:id="totalTextField" editable="false" layoutX="526.0" layoutY="512.0" prefHeight="25.0" prefWidth="107.0" promptText="Total" />
+      <Label fx:id="totalLabel" layoutX="444.0" layoutY="508.0" text="Total: " textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="21.0" />
+         </font>
+      </Label>
+      <Button fx:id="backButton" layoutX="601.0" layoutY="570.0" mnemonicParsing="false" onAction="#clickBack" style="-fx-background-color: darksalmon;" text="BACK" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="16.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

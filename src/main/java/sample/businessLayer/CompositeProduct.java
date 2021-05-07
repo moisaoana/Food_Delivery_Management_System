@@ -3,12 +3,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompositeProduct extends MenuItem{
-    private String name;
+    private String title;
     private List<MenuItem> productsList=new ArrayList<MenuItem>();
-
+    private double price;
     public CompositeProduct(String name) {
-        this.name = name;
+        this.title = name;
+        //price=computePrice();
     }
+
     public void  addProduct(MenuItem menuItem){
         productsList.add(menuItem);
     }
@@ -25,11 +27,11 @@ public class CompositeProduct extends MenuItem{
     }
 
     public String getName() {
-        return name;
-    }
+        return title;
+   }
 
     public void setName(String name) {
-        this.name = name;
+        this.title = name;
     }
 
     public List<MenuItem> getProductsList() {
@@ -38,5 +40,21 @@ public class CompositeProduct extends MenuItem{
 
     public void setProductsList(List<MenuItem> productsList) {
         this.productsList = productsList;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

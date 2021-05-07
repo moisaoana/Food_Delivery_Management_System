@@ -12,7 +12,7 @@ public class StartController {
     private Scene loginScene;
     private Scene registerScene;
     private Scene clientScene;
-
+    private Scene adminScene;
     public void setMain(Main main){
         this.main = main;
     }
@@ -25,7 +25,9 @@ public class StartController {
     public void setClientScene(Scene scene1){
         this.clientScene = scene1;
     }
-
+    public void setAdminScene(Scene scene1){
+        this.adminScene = scene1;
+    }
     @FXML
     private Button registerButton;
 

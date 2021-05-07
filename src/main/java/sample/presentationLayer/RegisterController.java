@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import sample.start.Main;
 import sample.businessLayer.DeliveryService;
 import sample.businessLayer.User;
-import sample.dataLayer.FileWriter;
+import sample.dataLayer.Serializator;
 
 public class RegisterController {
     ObservableList<String> typesList;
@@ -17,6 +17,7 @@ public class RegisterController {
     private Scene loginScene;
     private Scene startScene;
     private Scene clientScene;
+    private Scene adminScene;
     public void setMain(Main main){
         this.main = main;
         init();
@@ -29,6 +30,9 @@ public class RegisterController {
     }
     public void setClientScene(Scene scene1){
         this.clientScene = scene1;
+    }
+    public void setAdminScene(Scene scene1){
+        this.adminScene = scene1;
     }
     @FXML
     private Label usernameLabel;
@@ -108,14 +112,9 @@ public class RegisterController {
                 }
                 System.out.println(newUser.getID() + " " + newUser.getUsername() + " " + newUser.getPassword() + " " + newUser.getType());
                 DeliveryService.listOfUsers.add(newUser);
-                for (User user : DeliveryService.listOfUsers) {
-                    System.out.println(user.getUsername());
-                }
-                usernameTextfield.clear();
-                passwordTextfield.clear();
-                chooseType.setValue("Client");
+                clearAll();
                 main.setScene(startScene);
-                FileWriter.writeToFile(newUser,"users.txt");
+                Serializator.writeToFile(DeliveryService.listOfUsers,"users.txt");
             }
         }
     }

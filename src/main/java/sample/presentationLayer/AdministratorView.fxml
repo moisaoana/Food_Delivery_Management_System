@@ -1,14 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="sample.presentationLayer.AdministratorController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="513.0" prefWidth="819.0" style="-fx-background-color: darkseagreen;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.presentationLayer.AdministratorController">
+   <children>
+      <Label fx:id="titleLabel" layoutX="122.0" layoutY="14.0" prefHeight="46.0" prefWidth="260.0" text="Administrator Profile" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="importButton" layoutX="11.0" layoutY="84.0" mnemonicParsing="false" onAction="#clickImport" prefHeight="33.0" prefWidth="222.0" style="-fx-background-color: darksalmon;" text="Import initial set of products" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="13.0" />
+         </font>
+      </Button>
+      <TableView fx:id="menuTableView" layoutX="14.0" layoutY="155.0" prefHeight="142.0" prefWidth="397.0">
+         <columns>
+            <TableColumn fx:id="titleColumn" prefWidth="217.5" text="Title" />
+            <TableColumn fx:id="priceColumn" prefWidth="65.5" text="Price" />
+         </columns>
+      </TableView>
+      <Label fx:id="infoLabel" layoutX="14.0" layoutY="132.0" text="Create a new composite menu item:" textFill="#00611f">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Label>
+      <TableView fx:id="chosenItemsTableView" layoutX="428.0" layoutY="155.0" prefHeight="142.0" prefWidth="376.0">
+         <columns>
+            <TableColumn fx:id="chosenTitleColumn" prefWidth="219.0" text="Title" />
+            <TableColumn fx:id="chosenPriceColumn" minWidth="0.0" prefWidth="84.0" text="Price" />
+         </columns>
+      </TableView>
+      <Button fx:id="createButton" layoutX="342.0" layoutY="313.0" mnemonicParsing="false" onAction="#clickCreate" prefHeight="33.0" prefWidth="118.0" style="-fx-background-color: darksalmon;" text="CREATE" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="13.0" />
+         </font>
+      </Button>
+      <TextField fx:id="nameTextField" layoutX="159.0" layoutY="317.0" prefHeight="25.0" prefWidth="168.0" />
+      <Label fx:id="nameLabel" layoutX="11.0" layoutY="318.0" text="Name the new item:" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="backButton" layoutX="675.0" layoutY="454.0" mnemonicParsing="false" onAction="#clickBack" prefHeight="33.0" prefWidth="118.0" style="-fx-background-color: darksalmon;" text="BACK" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="13.0" />
+         </font>
+      </Button>
+      <TextField fx:id="addTitleTextField" layoutX="14.0" layoutY="402.0" />
+      <TextField fx:id="addRatingTextField" layoutX="167.0" layoutY="402.0" prefHeight="25.0" prefWidth="78.0" />
+      <TextField fx:id="addCaloriesTextField" layoutX="252.0" layoutY="402.0" prefHeight="25.0" prefWidth="78.0" />
+      <TextField fx:id="addProteinTextField" layoutX="343.0" layoutY="402.0" prefHeight="25.0" prefWidth="78.0" />
+      <TextField fx:id="addFatTextField" layoutX="429.0" layoutY="402.0" prefHeight="25.0" prefWidth="78.0" />
+      <TextField fx:id="addSodiumTextField" layoutX="515.0" layoutY="402.0" prefHeight="25.0" prefWidth="78.0" />
+      <TextField fx:id="addPriceTextField" layoutX="601.0" layoutY="402.0" prefHeight="25.0" prefWidth="78.0" />
+      <Label fx:id="addItemLabel" layoutX="11.0" layoutY="353.0" text="Add a new basic item: " textFill="#00611f">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="addTitleLabel" layoutX="65.0" layoutY="376.0" text="TITLE" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="addRatingLabel" layoutX="175.0" layoutY="376.0" text="RATING" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="addCaloriesLabel" layoutX="250.0" layoutY="376.0" text="CALORIES" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="addProteinLabel" layoutX="347.0" layoutY="376.0" text="PROTEIN" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="addFatLabel" layoutX="453.0" layoutY="376.0" text="FAT" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="addSodiumLabel" layoutX="521.0" layoutY="376.0" text="SODIUM" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="addPriceLabel" layoutX="616.0" layoutY="376.0" text="PRICE" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="addButton" layoutX="698.0" layoutY="398.0" mnemonicParsing="false" onAction="#clickAdd" prefHeight="23.0" prefWidth="71.0" style="-fx-background-color: darksalmon;" text="ADD" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="13.0" />
+         </font>
+      </Button>
+   </children>
 </AnchorPane>
