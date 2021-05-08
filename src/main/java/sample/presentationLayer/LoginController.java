@@ -133,7 +133,7 @@ public class LoginController {
         try {
             Parent rootClient = loader.load();
             ClientController controllerClient = loader.getController();
-            Scene clientScene = new Scene(rootClient, 730, 640);
+            Scene clientScene = new Scene(rootClient, 1200, 500);
             controllerClient.setMain(main);
             controllerClient.setStartScene(startScene);
             controllerClient.setRegisterScene(registerScene);

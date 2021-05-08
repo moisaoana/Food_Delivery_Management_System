@@ -9,11 +9,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.InputMethodEvent;
 import javafx.util.Callback;
 import sample.businessLayer.BaseProduct;
 import sample.businessLayer.CompositeProduct;
 import sample.businessLayer.DeliveryService;
 import sample.businessLayer.MenuItem;
+import sample.dataLayer.Serializator;
 import sample.start.Main;
 
 import java.net.URL;
@@ -127,6 +129,29 @@ public class AdministratorController implements Initializable {
 
     @FXML
     private Button addButton;
+    @FXML
+    private Button modifyButton;
+    @FXML
+    void clickModify(ActionEvent event) {
+        if(addTitleTextField.getText().isEmpty() || addRatingTextField.getText().isEmpty() || addCaloriesTextField.getText().isEmpty() || addProteinTextField.getText().isEmpty() || addFatTextField.getText().isEmpty() || addSodiumTextField.getText().isEmpty() ||addPriceTextField.getText().isEmpty()){
+            new ErrorMessage("Please fill all the required information!");
+        }else {
+            String title=addTitleTextField.getText();
+            double rating=Double.parseDouble(addRatingTextField.getText());
+            int calories=Integer.parseInt(addCaloriesTextField.getText());
+            int protein=Integer.parseInt(addProteinTextField.getText());
+            int fat=Integer.parseInt(addFatTextField.getText());
+            int sodium=Integer.parseInt(addSodiumTextField.getText());
+            double price=Double.parseDouble(addPriceTextField.getText());
+            BaseProduct baseProduct=new BaseProduct(title,rating,calories,protein,fat,sodium,price);
+            main.deliveryService.modifyProductAdd(baseProduct);
+            observableListMenu.addAll(baseProduct);
+            menuTableView.refresh();
+            clearAll();
+
+
+        }
+    }
 
     @FXML
     void clickAdd(ActionEvent event) {
@@ -147,21 +172,27 @@ public class AdministratorController implements Initializable {
               main.deliveryService.addNewBaseProduct(baseProduct);
               observableListMenu.add(baseProduct);
               menuTableView.refresh();
-              addTitleTextField.clear();
-              addRatingTextField.clear();
-              addCaloriesTextField.clear();
-              addProteinTextField.clear();
-              addFatTextField.clear();
-              addSodiumTextField.clear();
-              addPriceTextField.clear();
+              clearAll();
+
            }
        }
 
+    }
+    private void clearAll(){
+        addTitleTextField.clear();
+        addRatingTextField.clear();
+        addCaloriesTextField.clear();
+        addProteinTextField.clear();
+        addFatTextField.clear();
+        addSodiumTextField.clear();
+        addPriceTextField.clear();
     }
 
 
     @FXML
     void clickBack(ActionEvent event) {
+        clearAll();
+        observableListChosenItems.clear();
         main.setScene(startScene);
     }
 
@@ -186,14 +217,19 @@ public class AdministratorController implements Initializable {
 
     @FXML
     void clickImport(ActionEvent event) {
-
+        main.deliveryService.loadBaseProducts();
+        observableListMenu.clear();
+        observableListChosenItems.clear();
+        observableListMenu.addAll(DeliveryService.allMenuItems);
+        menuTableView.refresh();
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         populateMenuTable(DeliveryService.allMenuItems);
         addButtons(menuTableView,chosenItemsTableView,observableListChosenItems);
-        ClientController.addButtonsRemove(menuTableView,observableListMenu);
+        addButtonsRemove(menuTableView,observableListMenu,observableListChosenItems,chosenItemsTableView);
         ClientController.addButtonsRemove(chosenItemsTableView,observableListChosenItems);
+        modifyButtons(menuTableView);
     }
     @FXML
     public void populateMenuTable(Set<MenuItem> menuItems){
@@ -209,7 +245,7 @@ public class AdministratorController implements Initializable {
     }
     public static void  addButtons(TableView<MenuItem> tableView,TableView<MenuItem>tableView2,ObservableList<MenuItem>observableList)
     {
-        TableColumn<MenuItem, Void> buttons = new TableColumn<>("Order");
+        TableColumn<MenuItem, Void> buttons = new TableColumn<>("Add");
         Callback<TableColumn<MenuItem, Void>, TableCell<MenuItem, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<MenuItem, Void> call(final TableColumn<MenuItem, Void> param) {
@@ -240,4 +276,89 @@ public class AdministratorController implements Initializable {
         tableView.getColumns().add(buttons);
     }
 
+    public void  addButtonsRemove(TableView<MenuItem> tableView,ObservableList<MenuItem>observableList,ObservableList<MenuItem>observableList2,TableView<MenuItem> tableView2)
+    {
+        TableColumn<MenuItem, Void> buttons = new TableColumn<>("Remove");
+        Callback<TableColumn<MenuItem, Void>, TableCell<MenuItem, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<MenuItem, Void> call(final TableColumn<MenuItem, Void> param) {
+                return new TableCell<>() {
+                    private final Button newButton = new Button("-");
+                    {
+                        ClientController.styleButton(newButton);
+                        newButton.setOnAction((ActionEvent event) -> {
+                            MenuItem menuItem = getTableView().getItems().get(getIndex());
+                            observableList.remove(menuItem);
+                            tableView.refresh();
+                            main.deliveryService.removeProduct(menuItem);
+                            observableList2.remove(menuItem);
+                            tableView2.refresh();
+
+                        });
+                    }
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(newButton);
+                        }
+                    }
+                };
+            }
+        };
+        buttons.setCellFactory(cellFactory);
+        tableView.getColumns().add(buttons);
+    }
+    private void fillTextFields(MenuItem menuItem){
+        if(menuItem instanceof BaseProduct){
+            addTitleTextField.setText(((BaseProduct) menuItem).getTitle());
+            addPriceTextField.setText(Double.toString(((BaseProduct) menuItem).getPrice()));
+            addSodiumTextField.setText(Integer.toString(((BaseProduct) menuItem).getSodium()));
+            addFatTextField.setText(Integer.toString(((BaseProduct) menuItem).getFat()));
+            addProteinTextField.setText(Integer.toString(((BaseProduct) menuItem).getProtein()));
+            addCaloriesTextField.setText(Integer.toString(((BaseProduct) menuItem).getCalories()));
+            addRatingTextField.setText(Double.toString(((BaseProduct) menuItem).getRating()));
+        }
+    }
+    public void  modifyButtons(TableView<MenuItem> tableView)
+    {
+        TableColumn<MenuItem, Void> buttons = new TableColumn<>("Modify");
+        Callback<TableColumn<MenuItem, Void>, TableCell<MenuItem, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<MenuItem, Void> call(final TableColumn<MenuItem, Void> param) {
+                return new TableCell<>() {
+                    private final Button newButton = new Button("M");{
+                        ClientController.styleButton(newButton);
+                        newButton.setOnAction((ActionEvent event) -> {
+                            MenuItem data = getTableView().getItems().get(getIndex());
+                            if(data instanceof BaseProduct) {
+                                fillTextFields(data);
+                                main.deliveryService.modifyProductDelete(data);
+                                observableListMenu.remove(data);
+                                observableListChosenItems.remove(data);
+                                chosenItemsTableView.refresh();
+                            }
+                        });
+                    }
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(newButton);
+                        }
+                    }
+                };
+            }
+        };
+        buttons.setCellFactory(cellFactory);
+        tableView.getColumns().add(buttons);
+    }
+
 }
+
+
+

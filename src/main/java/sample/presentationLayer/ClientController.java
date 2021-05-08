@@ -1,5 +1,7 @@
 package sample.presentationLayer;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import sample.businessLayer.BaseProduct;
@@ -107,9 +110,36 @@ public class ClientController {// implements Initializable {
     private Label totalLabel;
     @FXML
     private Button backButton;
+    @FXML
+    private TextField searchByNameTextField;
+
+    @FXML
+    private TextField searchByRatingTextField;
+
+    @FXML
+    private TextField searchByCaloriesTextField;
+
+    @FXML
+    private TextField serachByProteinTextField;
+
+    @FXML
+    private TextField searchByFatTextField;
+
+    @FXML
+    private TextField searchBySodiumTextField;
+
+    @FXML
+    private TextField searchByPriceTextField;
+
+    @FXML
+    private TextField searchByNameCompositeTextField;
+
+    @FXML
+    private TextField searchByPriceCompositeTextField;
 
     @FXML
     void clickBack(ActionEvent event) {
+        clearAll();
         main.setScene(startScene);
     }
 
@@ -117,6 +147,14 @@ public class ClientController {// implements Initializable {
     @FXML
     void clickOrder(ActionEvent event) {
 
+    }
+    private void clearAll(){
+        searchByNameTextField.clear();
+        searchByPriceTextField.clear();
+        searchByCaloriesTextField.clear();
+        searchByFatTextField.clear();
+        searchByRatingTextField.clear();
+        searchBySodiumTextField.clear();
     }
 
     @FXML
@@ -184,6 +222,15 @@ public class ClientController {// implements Initializable {
         addButtons(menuTableView,orderTableView,observableListOrder);
         addButtons(composedTableView,orderTableView,observableListOrder);
         addButtonsRemove(orderTableView,observableListOrder);
+        search(searchByRatingTextField);
+        search(searchByCaloriesTextField);
+        search(serachByProteinTextField);
+        search(searchByFatTextField);
+        search(searchBySodiumTextField);
+        search(searchByPriceTextField);
+        search(searchByNameTextField);
+        searchComposite(searchByNameCompositeTextField);
+        searchComposite(searchByPriceCompositeTextField);
     }
     public static void styleButton(Button button){
         button.setStyle("-fx-text-fill: #ffffff;-fx-background-color: darksalmon");
@@ -218,5 +265,12 @@ public class ClientController {// implements Initializable {
         };
         buttons.setCellFactory(cellFactory);
         tableView.getColumns().add(buttons);
+    }
+
+    public void search(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> main.deliveryService.search(observableListSimple, menuTableView,searchByRatingTextField,searchByCaloriesTextField,serachByProteinTextField,searchByFatTextField,searchBySodiumTextField,searchByPriceTextField,searchByNameTextField));
+    }
+    public void searchComposite(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> main.deliveryService.searchComposite(observableListComposite, composedTableView,searchByNameCompositeTextField,searchByPriceCompositeTextField));
     }
 }

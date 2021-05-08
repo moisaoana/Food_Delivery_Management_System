@@ -8,37 +8,37 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="592.0" prefWidth="810.0" style="-fx-background-color: darkseagreen;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.presentationLayer.ClientController">
+<AnchorPane prefHeight="531.0" prefWidth="1207.0" style="-fx-background-color: darkseagreen;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.presentationLayer.ClientController">
    <children>
-      <Label fx:id="titleLabel" layoutX="220.0" layoutY="14.0" prefHeight="10.0" prefWidth="224.0" text="Client Profile" textFill="WHITE">
+      <Label fx:id="titleLabel" layoutX="250.0" layoutY="7.0" prefHeight="39.0" prefWidth="171.0" text="Client Profile" textFill="WHITE">
          <font>
-            <Font name="Kristen ITC" size="29.0" />
+            <Font name="Kristen ITC" size="23.0" />
          </font>
       </Label>
-      <TableView fx:id="menuTableView" layoutX="20.0" layoutY="105.0" prefHeight="142.0" prefWidth="696.0">
+      <TableView fx:id="menuTableView" layoutX="14.0" layoutY="123.0" prefHeight="142.0" prefWidth="696.0">
         <columns>
           <TableColumn fx:id="titleColumn" prefWidth="217.5" text="Title" />
           <TableColumn fx:id="ratingColumn" prefWidth="71.0" text="Rating" />
             <TableColumn fx:id="caloriesColumn" prefWidth="72.5" text="Calories" />
             <TableColumn fx:id="proteinColumn" minWidth="0.0" prefWidth="67.0" text="Protein" />
-            <TableColumn fx:id="fatColumn" prefWidth="58.0" text="Fat" />
-            <TableColumn fx:id="sodiumColumn" prefWidth="84.0" text="Sodium" />
+            <TableColumn fx:id="fatColumn" prefWidth="69.0" text="Fat" />
+            <TableColumn fx:id="sodiumColumn" prefWidth="73.0" text="Sodium" />
             <TableColumn fx:id="priceColumn" prefWidth="65.5" text="Price" />
         </columns>
       </TableView>
-      <TableView fx:id="composedTableView" layoutX="14.0" layoutY="304.0" prefHeight="154.0" prefWidth="717.0">
+      <TableView fx:id="composedTableView" layoutX="10.0" layoutY="349.0" prefHeight="142.0" prefWidth="696.0">
         <columns>
-          <TableColumn fx:id="composedTitleColumn" prefWidth="223.5" text="Title" />
-          <TableColumn fx:id="composedPriceColumn" minWidth="1.5" prefWidth="59.0" text="Price" />
-            <TableColumn fx:id="compositionComposedColumn" prefWidth="358.5" text="Composition" />
+            <TableColumn fx:id="composedTitleColumn" prefWidth="231.5" text="Title" />
+          <TableColumn fx:id="composedPriceColumn" minWidth="1.5" prefWidth="174.0" text="Price" />
+            <TableColumn fx:id="compositionComposedColumn" prefWidth="235.5" text="Composition" />
         </columns>
       </TableView>
-      <Label fx:id="menuLabel" layoutX="14.0" layoutY="66.0" style="-fx-border-color: darksalmon; -fx-border-width: 5;" text="BASIC MENU ITMES" textFill="WHITE">
+      <Label fx:id="menuLabel" layoutX="19.0" layoutY="46.0" style="-fx-border-color: darksalmon; -fx-border-width: 5;" text="BASIC MENU ITMES" textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="orderLabel" layoutX="20.0" layoutY="465.0" style="-fx-border-color: darksalmon; -fx-border-width: 5;" text="ORDER" textFill="WHITE">
+      <Label fx:id="orderLabel" layoutX="942.0" layoutY="27.0" style="-fx-border-color: darksalmon; -fx-border-width: 5;" text="ORDER" textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="18.0" />
          </font>
@@ -48,27 +48,72 @@
             <Font name="Kristen ITC" size="18.0" />
          </font>
       </Label>
-      <TableView fx:id="orderTableView" layoutX="8.0" layoutY="504.0" prefHeight="131.0" prefWidth="430.0">
+      <TableView fx:id="orderTableView" layoutX="762.0" layoutY="121.0" prefHeight="221.0" prefWidth="412.0">
         <columns>
-          <TableColumn fx:id="orderTitleColumn" prefWidth="267.5" text="Title" />
-          <TableColumn fx:id="orderPriceColumn" minWidth="0.0" prefWidth="79.5" text="Price" />
+          <TableColumn fx:id="orderTitleColumn" prefWidth="217.0" text="Title" />
+          <TableColumn fx:id="orderPriceColumn" minWidth="0.0" prefWidth="106.0" text="Price" />
         </columns>
       </TableView>
-      <Button fx:id="orderButton" layoutX="506.0" layoutY="570.0" mnemonicParsing="false" onAction="#clickOrder" style="-fx-background-color: darksalmon;" text="ORDER" textFill="WHITE">
+      <Button fx:id="orderButton" layoutX="865.0" layoutY="431.0" mnemonicParsing="false" onAction="#clickOrder" style="-fx-background-color: darksalmon;" text="ORDER" textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="16.0" />
          </font>
       </Button>
-      <TextField fx:id="totalTextField" editable="false" layoutX="526.0" layoutY="512.0" prefHeight="25.0" prefWidth="107.0" promptText="Total" />
-      <Label fx:id="totalLabel" layoutX="444.0" layoutY="508.0" text="Total: " textFill="WHITE">
+      <TextField fx:id="totalTextField" editable="false" layoutX="961.0" layoutY="381.0" prefHeight="25.0" prefWidth="107.0" promptText="Total" />
+      <Label fx:id="totalLabel" layoutX="849.0" layoutY="377.0" text="Total: " textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="21.0" />
          </font>
       </Label>
-      <Button fx:id="backButton" layoutX="601.0" layoutY="570.0" mnemonicParsing="false" onAction="#clickBack" style="-fx-background-color: darksalmon;" text="BACK" textFill="WHITE">
+      <Button fx:id="backButton" layoutX="986.0" layoutY="431.0" mnemonicParsing="false" onAction="#clickBack" style="-fx-background-color: darksalmon;" text="BACK" textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="16.0" />
          </font>
       </Button>
+      <TextField fx:id="searchByNameTextField" layoutX="14.0" layoutY="94.0" prefHeight="27.0" prefWidth="217.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
+         <font>
+            <Font name="Kristen ITC" size="10.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="searchByRatingTextField" layoutX="233.0" layoutY="94.0" prefHeight="27.0" prefWidth="68.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
+         <font>
+            <Font name="Kristen ITC" size="10.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="searchByCaloriesTextField" layoutX="304.0" layoutY="94.0" prefHeight="27.0" prefWidth="68.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
+         <font>
+            <Font name="Kristen ITC" size="10.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="serachByProteinTextField" layoutX="376.0" layoutY="94.0" prefHeight="27.0" prefWidth="68.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
+         <font>
+            <Font name="Kristen ITC" size="10.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="searchByFatTextField" layoutX="446.0" layoutY="94.0" prefHeight="27.0" prefWidth="68.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
+         <font>
+            <Font name="Kristen ITC" size="10.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="searchBySodiumTextField" layoutX="515.0" layoutY="94.0" prefHeight="27.0" prefWidth="68.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
+         <font>
+            <Font name="Kristen ITC" size="10.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="searchByPriceTextField" layoutX="585.0" layoutY="94.0" prefHeight="27.0" prefWidth="68.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
+         <font>
+            <Font name="Kristen ITC" size="10.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="searchByNameCompositeTextField" layoutX="14.0" layoutY="310.0" prefHeight="27.0" prefWidth="224.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
+         <font>
+            <Font name="Kristen ITC" size="10.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="searchByPriceCompositeTextField" layoutX="244.0" layoutY="310.0" prefHeight="27.0" prefWidth="171.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
+         <font>
+            <Font name="Kristen ITC" size="10.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>
