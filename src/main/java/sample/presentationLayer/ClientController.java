@@ -13,9 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
-import sample.businessLayer.BaseProduct;
-import sample.businessLayer.CompositeProduct;
-import sample.businessLayer.DeliveryService;
+import sample.businessLayer.*;
 import sample.businessLayer.MenuItem;
 import sample.start.Main;
 
@@ -26,7 +24,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-public class ClientController {// implements Initializable {
+public class ClientController  implements Initializable {
+    private User user;
     private Main main;
     private Scene startScene;
     private Scene registerScene;
@@ -35,6 +34,7 @@ public class ClientController {// implements Initializable {
     private ObservableList<MenuItem> observableListOrder = FXCollections.observableArrayList();
     private ObservableList<MenuItem> observableListSimple = FXCollections.observableArrayList();
     private ObservableList<MenuItem> observableListComposite = FXCollections.observableArrayList();
+    private double total=0;
     public void setMain(Main main){
         this.main = main;
     }
@@ -146,7 +146,11 @@ public class ClientController {// implements Initializable {
 
     @FXML
     void clickOrder(ActionEvent event) {
-
+        Date date=main.deliveryService.makeAnOrder(observableListOrder,user);
+        main.deliveryService.createBill(observableListOrder,user,date);
+        observableListOrder.clear();
+        total=0;
+        totalTextField.clear();
     }
     private void clearAll(){
         searchByNameTextField.clear();
@@ -156,7 +160,6 @@ public class ClientController {// implements Initializable {
         searchByRatingTextField.clear();
         searchBySodiumTextField.clear();
     }
-
     @FXML
     public void populateMenuTable(Set<sample.businessLayer.MenuItem> menuItems){
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -197,6 +200,12 @@ public class ClientController {// implements Initializable {
                            MenuItem data = getTableView().getItems().get(getIndex());
                            observableList.add(data);
                            tableView2.refresh();
+                           if(data instanceof BaseProduct){
+                               total+=((BaseProduct) data).getPrice();
+                           }else if(data instanceof  CompositeProduct){
+                               total+=((CompositeProduct) data).getPrice();
+                           }
+                            totalTextField.setText(Double.toString(total));
                         });
                     }
                     @Override
@@ -216,8 +225,8 @@ public class ClientController {// implements Initializable {
     }
 
 
-   // @Override
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         populateMenuTable(DeliveryService.allMenuItems);
         addButtons(menuTableView,orderTableView,observableListOrder);
         addButtons(composedTableView,orderTableView,observableListOrder);
@@ -231,11 +240,12 @@ public class ClientController {// implements Initializable {
         search(searchByNameTextField);
         searchComposite(searchByNameCompositeTextField);
         searchComposite(searchByPriceCompositeTextField);
+        totalTextField.setText(Double.toString(total));
     }
     public static void styleButton(Button button){
         button.setStyle("-fx-text-fill: #ffffff;-fx-background-color: darksalmon");
     }
-    public static void  addButtonsRemove(TableView<MenuItem> tableView,ObservableList<MenuItem>observableList)
+    public  void  addButtonsRemove(TableView<MenuItem> tableView,ObservableList<MenuItem>observableList)
     {
         TableColumn<MenuItem, Void> buttons = new TableColumn<>("Remove");
         Callback<TableColumn<MenuItem, Void>, TableCell<MenuItem, Void>> cellFactory = new Callback<>() {
@@ -249,6 +259,12 @@ public class ClientController {// implements Initializable {
                            MenuItem menuItem = getTableView().getItems().get(getIndex());
                             observableList.remove(menuItem);
                             tableView.refresh();
+                            if(menuItem instanceof BaseProduct){
+                                total-=((BaseProduct) menuItem).getPrice();
+                            }else if(menuItem instanceof  CompositeProduct){
+                                total-=((CompositeProduct) menuItem).getPrice();
+                            }
+                            totalTextField.setText(Double.toString(total));
                         });
                     }
                     @Override
@@ -273,4 +289,14 @@ public class ClientController {// implements Initializable {
     public void searchComposite(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> main.deliveryService.searchComposite(observableListComposite, composedTableView,searchByNameCompositeTextField,searchByPriceCompositeTextField));
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
 }

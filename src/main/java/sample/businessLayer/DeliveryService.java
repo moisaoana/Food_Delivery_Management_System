@@ -6,9 +6,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import sample.dataLayer.Deserializator;
 import sample.dataLayer.Serializator;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,12 +22,27 @@ import java.util.stream.Stream;
 
 public class DeliveryService implements  IDeliveryServiceProcessing{
     public static List<User> listOfUsers=new ArrayList<>();
-    private Map<Order,ArrayList<MenuItem>> order=new HashMap<>();
+    private Map<Order,ArrayList<MenuItem>> orders=new HashMap<>();
     public static Set<MenuItem> allMenuItems=new TreeSet<>(new OrderAlphabetically());
     public static Set<BaseProduct> allBaseProducts=new TreeSet<>(new OrderAlphabetically());
+    private PropertyChangeSupport propertyChangeSupport;
+    private String alert;
+
     public DeliveryService(){
         listOfUsers= Deserializator.loadInfoUsers();
         allMenuItems=Deserializator.loadInfoMenuItems();
+        propertyChangeSupport=new PropertyChangeSupport(this);
+    }
+    public void addListener(PropertyChangeListener propertyChangeListener) {
+        propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
+    }
+
+    public void removeListener(PropertyChangeListener propertyChangeListener) {
+        propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
+    }
+    public void setAlert(String value) {
+        propertyChangeSupport.firePropertyChange("alert", this.alert, value);
+        this.alert = value;
     }
 
     @Override
@@ -36,10 +57,6 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         allMenuItems.addAll(allBaseProducts);
         Serializator.writeToFileSet(allMenuItems,"menuitems.txt");
 
-    }
-
-    @Override
-    public void makeAnOrder(List<MenuItem> orderedItems) {
     }
 
     @Override
@@ -109,6 +126,57 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         selectedItemsObservable.addAll(selectedItems);
         tableView.setItems(selectedItemsObservable);
         tableView.refresh();
+    }
+
+    @Override
+    public void createBill(ObservableList<MenuItem> menuItems, User user,Date date) {
+        try {
+            FileWriter fileWriter1 = new FileWriter("bill.txt",false);
+            fileWriter1.write("Order bill\n");
+            fileWriter1.close();
+            FileWriter fileWriter = new FileWriter("bill.txt",true);
+            fileWriter.write("Date: "+date.getDay()+"."+date.getMonth()+"."+date.getYear()+" "+date.getHour()+":"+date.getMinutes()+":"+date.getSeconds()+"\n");
+            fileWriter.write("Client: "+user.getUsername()+"\nProducts:\n");
+            double total=0;
+            for(MenuItem menuItem: menuItems){
+                if(menuItem instanceof BaseProduct){
+                    fileWriter.write(((BaseProduct) menuItem).getTitle()+", Price: "+((BaseProduct) menuItem).getPrice()+"\n");
+                    total+=((BaseProduct) menuItem).getPrice();
+                }else if(menuItem instanceof CompositeProduct){
+                    fileWriter.write(((CompositeProduct) menuItem).getTitle()+", Price: "+((CompositeProduct) menuItem).getPrice()+"\n");
+                    total+=((CompositeProduct) menuItem).getPrice();
+                }
+            }
+            fileWriter.write("Total: "+total+" RON");
+            fileWriter.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Date makeAnOrder(ObservableList<MenuItem> orderedItems, User user) {//not done
+        int orderId = generateOrderId();
+        LocalDate localDate = LocalDate.now();
+        LocalTime localTime= LocalTime.now();
+        Date date=new Date(localDate.getDayOfMonth(),localDate.getMonthValue(),localDate.getYear(),localTime.getHour(),localTime.getMinute(),localTime.getSecond());
+        /*
+        Order newOrder=new Order(orderId,user.getID(),date);
+        ArrayList<MenuItem> listOfOrderedItems = new ArrayList<>(orderedItems);
+        orders.put(newOrder,listOfOrderedItems);
+        Serializator.writeToFileMap(orders,"orders.txt");
+
+         */
+
+        return date;
+
+    }
+    private int generateOrderId(){
+        if(orders.size()==0){
+            return 1;
+        }else{
+            return orders.size()+1;
+        }
     }
 
 }

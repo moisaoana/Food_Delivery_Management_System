@@ -1,5 +1,7 @@
 package sample.businessLayer;
 
+import java.util.Objects;
+
 public class Order {
     private int orderID;
     private int clientID;
@@ -32,5 +34,20 @@ public class Order {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return orderID == order.orderID &&
+                clientID == order.clientID &&
+                Objects.equals(orderDate, order.orderDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderID, clientID, orderDate);
     }
 }

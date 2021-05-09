@@ -6,12 +6,14 @@ public class Date {
     private int year;
     private int hour;
     private int minutes;
-    public Date(int day, int month, int year, int hour, int minutes){
+    private int seconds;
+    public Date(int day, int month, int year, int hour, int minutes, int seconds){
         this.day=day;
         this.month=month;
         this.year=year;
         this.hour=hour;
         this.minutes=minutes;
+        this.seconds=seconds;
     }
 
     public int getDay() {
@@ -52,5 +54,13 @@ public class Date {
 
     public void setMinutes(int minutes) {
         this.minutes = minutes;
+    }
+
+    public int getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
     }
 }

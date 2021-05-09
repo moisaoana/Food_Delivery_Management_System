@@ -228,7 +228,7 @@ public class AdministratorController implements Initializable {
         populateMenuTable(DeliveryService.allMenuItems);
         addButtons(menuTableView,chosenItemsTableView,observableListChosenItems);
         addButtonsRemove(menuTableView,observableListMenu,observableListChosenItems,chosenItemsTableView);
-        ClientController.addButtonsRemove(chosenItemsTableView,observableListChosenItems);
+        addButtonsRemove(chosenItemsTableView,observableListChosenItems);
         modifyButtons(menuTableView);
     }
     @FXML
@@ -357,6 +357,39 @@ public class AdministratorController implements Initializable {
         buttons.setCellFactory(cellFactory);
         tableView.getColumns().add(buttons);
     }
+    public  void  addButtonsRemove(TableView<MenuItem> tableView,ObservableList<MenuItem>observableList)
+    {
+        TableColumn<MenuItem, Void> buttons = new TableColumn<>("Remove");
+        Callback<TableColumn<MenuItem, Void>, TableCell<MenuItem, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<MenuItem, Void> call(final TableColumn<MenuItem, Void> param) {
+                return new TableCell<>() {
+                    private final Button newButton = new Button("-");
+                    {
+                        ClientController.styleButton(newButton);
+                        newButton.setOnAction((ActionEvent event) -> {
+                            MenuItem menuItem = getTableView().getItems().get(getIndex());
+                            observableList.remove(menuItem);
+                            tableView.refresh();
+
+                        });
+                    }
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(newButton);
+                        }
+                    }
+                };
+            }
+        };
+        buttons.setCellFactory(cellFactory);
+        tableView.getColumns().add(buttons);
+    }
+
 
 }
 

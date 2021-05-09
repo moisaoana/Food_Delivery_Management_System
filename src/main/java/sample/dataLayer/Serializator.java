@@ -1,6 +1,7 @@
 package sample.dataLayer;
 
 import sample.businessLayer.MenuItem;
+import sample.businessLayer.Order;
 import sample.businessLayer.User;
 
 import java.io.FileNotFoundException;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Serializator {
@@ -41,6 +43,24 @@ public class Serializator {
         try {
             out = new ObjectOutputStream(file);
             out.writeObject(menuItems);
+            out.close();
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public static void writeToFileMap(Map<Order,ArrayList<MenuItem>> orders, String filename){
+        FileOutputStream file = null;
+        try {
+            file = new FileOutputStream(filename);
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(file);
+            out.writeObject(orders);
             out.close();
             file.close();
         } catch (IOException e) {

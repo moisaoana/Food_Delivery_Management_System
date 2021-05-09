@@ -102,8 +102,10 @@ public class LoginController {
                 if(user.getUsername().equals(usernameTextfield.getText())){
                     if(user.getPassword().equals(passwordTextfield.getText())){
                         if(user.getType().equals("Client")){
-                            Scene clientScene=initializeClientScene();
+                            Scene clientScene=initializeClientScene(user);
                             main.setScene(clientScene);
+
+
                         }else if(user.getType().equals("Administrator")){
                             main.setScene(adminScene);
                         }else{
@@ -121,7 +123,7 @@ public class LoginController {
             }
         }
     }
-    public Scene initializeClientScene() {
+    public Scene initializeClientScene(User user) {
         URL urlClient = null;
         try {
             urlClient = new File("src/main/java/sample/presentationLayer/ClientView.fxml").toURI().toURL();
@@ -138,6 +140,7 @@ public class LoginController {
             controllerClient.setStartScene(startScene);
             controllerClient.setRegisterScene(registerScene);
             controllerClient.setAdminScene(adminScene);
+            controllerClient.setUser(user);
             return clientScene;
 
         } catch (IOException e) {
