@@ -66,7 +66,7 @@ public class ClientController  implements Initializable {
     private TableColumn<MenuItem, Double> composedPriceColumn;
 
     @FXML
-    private TableColumn<MenuItem,String> compositionComposedColumn;
+    private TableColumn<MenuItem,String>compositionComposedColumn;
 
     @FXML
     private TableView<MenuItem> menuTableView;
@@ -185,6 +185,7 @@ public class ClientController  implements Initializable {
         menuTableView.setItems(observableListSimple);
         composedTableView.setItems(observableListComposite);
         orderTableView.setItems(observableListOrder);
+
 
     }
     public void  addButtons(TableView<MenuItem> tableView,TableView<MenuItem>tableView2,ObservableList<MenuItem>observableList)

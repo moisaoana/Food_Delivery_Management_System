@@ -1,6 +1,8 @@
 package sample.businessLayer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class CompositeProduct extends MenuItem{
     private String title;
@@ -35,7 +37,7 @@ public class CompositeProduct extends MenuItem{
     }
 
     public List<MenuItem> getProductsList() {
-        return productsList;
+      return productsList;
     }
 
     public void setProductsList(List<MenuItem> productsList) {
@@ -57,4 +59,5 @@ public class CompositeProduct extends MenuItem{
     public void setPrice(double price) {
         this.price = price;
     }
+
 }

@@ -1,6 +1,9 @@
 package sample.businessLayer;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class User implements Serializable {
     private int ID;
@@ -20,6 +23,7 @@ public class User implements Serializable {
         this.password = password;
         this.type = type;
     }
+
     public User(){
 
     }
@@ -55,4 +59,6 @@ public class User implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+
+
 }

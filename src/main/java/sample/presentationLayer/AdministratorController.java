@@ -132,6 +132,47 @@ public class AdministratorController implements Initializable {
     @FXML
     private Button modifyButton;
     @FXML
+    private Button generateReport1;
+
+    @FXML
+    private Label report1Label;
+
+    @FXML
+    private TextField startHourTF;
+
+    @FXML
+    private TextField endHourTF;
+
+    @FXML
+    private Label report2Label;
+
+    @FXML
+    private TextField numberTF;
+
+    @FXML
+    private Button generateReport2;
+
+    @FXML
+    private Label report3Label;
+
+    @FXML
+    private TextField nrOfOrdersTF;
+
+    @FXML
+    private TextField sumTF;
+
+    @FXML
+    private Button generateReport3;
+
+    @FXML
+    private Label report1Label1;
+
+    @FXML
+    private TextField dayTF;
+
+    @FXML
+    private Button generateReport4;
+    @FXML
     void clickModify(ActionEvent event) {
         if(addTitleTextField.getText().isEmpty() || addRatingTextField.getText().isEmpty() || addCaloriesTextField.getText().isEmpty() || addProteinTextField.getText().isEmpty() || addFatTextField.getText().isEmpty() || addSodiumTextField.getText().isEmpty() ||addPriceTextField.getText().isEmpty()){
             new ErrorMessage("Please fill all the required information!");
@@ -389,6 +430,36 @@ public class AdministratorController implements Initializable {
         buttons.setCellFactory(cellFactory);
         tableView.getColumns().add(buttons);
     }
+    @FXML
+    void clickGenerateReport1(ActionEvent event) {
+        if(startHourTF.getText().isEmpty() || endHourTF.getText().isEmpty()){
+            new ErrorMessage("Please fill all the required information!");
+        }else{
+            int startHour=Integer.parseInt(startHourTF.getText());
+            int endHour=Integer.parseInt(endHourTF.getText());
+            main.deliveryService.generateReport1(startHour,endHour);
+        }
+    }
+
+    @FXML
+    void clickGenerateReport2(ActionEvent event) {
+        if(numberTF.getText().isEmpty()){
+            new ErrorMessage("Please fill all the required information!");
+        }else{
+
+        }
+    }
+
+    @FXML
+    void clickGenerateReport3(ActionEvent event) {
+
+    }
+
+    @FXML
+    void clickGenerateReport4(ActionEvent event) {
+
+    }
+
 
 
 }

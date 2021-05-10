@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="513.0" prefWidth="861.0" style="-fx-background-color: darkseagreen;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.presentationLayer.AdministratorController">
+<AnchorPane prefHeight="641.0" prefWidth="863.0" style="-fx-background-color: darkseagreen;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.presentationLayer.AdministratorController">
    <children>
       <Label fx:id="titleLabel" layoutX="122.0" layoutY="14.0" prefHeight="46.0" prefWidth="260.0" text="Administrator Profile" textFill="WHITE">
          <font>
@@ -108,6 +108,52 @@
       <Button fx:id="modifyButton" layoutX="722.0" layoutY="398.0" mnemonicParsing="false" onAction="#clickModify" prefHeight="32.0" prefWidth="94.0" style="-fx-background-color: darksalmon;" text="MODIFY" textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="13.0" />
+         </font>
+      </Button>
+      <Button fx:id="generateReport1" layoutX="212.0" layoutY="462.0" mnemonicParsing="false" onAction="#clickGenerateReport1" prefHeight="23.0" prefWidth="94.0" style="-fx-background-color: darksalmon;" text="GENERATE" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="11.0" />
+         </font>
+      </Button>
+      <Label fx:id="report1Label" layoutX="15.0" layoutY="443.0" text="-REPORT 1-time interval of the orders" textFill="#00611f">
+         <font>
+            <Font name="Kristen ITC" size="11.0" />
+         </font>
+      </Label>
+      <TextField fx:id="startHourTF" layoutX="11.0" layoutY="462.0" prefHeight="25.0" prefWidth="82.0" promptText="Start Hour" />
+      <TextField fx:id="endHourTF" layoutX="107.0" layoutY="462.0" prefHeight="25.0" prefWidth="82.0" promptText="End Hour" />
+      <Label fx:id="report2Label" layoutX="14.0" layoutY="496.0" text="-REPORT 2- the products ordered more than a specified number of times so far" textFill="#00611f">
+         <font>
+            <Font name="Kristen ITC" size="11.0" />
+         </font>
+      </Label>
+      <TextField fx:id="numberTF" layoutX="11.0" layoutY="514.0" prefHeight="25.0" prefWidth="82.0" promptText="Value" />
+      <Button fx:id="generateReport2" layoutX="122.0" layoutY="514.0" mnemonicParsing="false" onAction="#clickGenerateReport2" prefHeight="23.0" prefWidth="94.0" style="-fx-background-color: darksalmon;" text="GENERATE" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="11.0" />
+         </font>
+      </Button>
+      <Label fx:id="report3Label" layoutX="14.0" layoutY="540.0" text="-REPORT 3-the clients that have ordered more than a specified number of times and the value of the order was higher than a specified amount" textFill="#00611f">
+         <font>
+            <Font name="Kristen ITC" size="11.0" />
+         </font>
+      </Label>
+      <TextField fx:id="nrOfOrdersTF" layoutX="11.0" layoutY="558.0" prefHeight="25.0" prefWidth="82.0" promptText="Nr. of orders" />
+      <TextField fx:id="sumTF" layoutX="95.0" layoutY="558.0" prefHeight="25.0" prefWidth="82.0" promptText="Amount" />
+      <Button fx:id="generateReport3" layoutX="196.0" layoutY="558.0" mnemonicParsing="false" onAction="#clickGenerateReport3" prefHeight="23.0" prefWidth="94.0" style="-fx-background-color: darksalmon;" text="GENERATE" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="11.0" />
+         </font>
+      </Button>
+      <Label fx:id="report1Label1" layoutX="8.0" layoutY="594.0" text="-REPORT 4-the products ordered within a specified day with the number of times they have been ordered." textFill="#00611f">
+         <font>
+            <Font name="Kristen ITC" size="11.0" />
+         </font>
+      </Label>
+      <TextField fx:id="dayTF" layoutX="11.0" layoutY="612.0" prefHeight="25.0" prefWidth="54.0" promptText="Day" />
+      <Button fx:id="generateReport4" layoutX="130.0" layoutY="612.0" mnemonicParsing="false" onAction="#clickGenerateReport4" prefHeight="23.0" prefWidth="94.0" style="-fx-background-color: darksalmon;" text="GENERATE" textFill="WHITE">
+         <font>
+            <Font name="Kristen ITC" size="11.0" />
          </font>
       </Button>
    </children>

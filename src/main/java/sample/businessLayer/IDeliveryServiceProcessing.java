@@ -23,6 +23,10 @@ public interface IDeliveryServiceProcessing {
     void search(ObservableList<MenuItem> menuItems, TableView<MenuItem> tableView, TextField ratingTF,TextField caloriesTF, TextField proteinTF, TextField fatTF, TextField sodiumTF, TextField priceTF, TextField titleTF);
     void searchComposite(ObservableList<MenuItem>menuItems, TableView<MenuItem>tableView, TextField titleTF, TextField priceTF);
     void createBill(ObservableList<MenuItem> menuItems,User user,Date date);
+    void generateReport1(int startHour, int endHour);
+    void generateReport2(int number);
+    void generateReport3();
+    void generateReport4();
 
 
 }

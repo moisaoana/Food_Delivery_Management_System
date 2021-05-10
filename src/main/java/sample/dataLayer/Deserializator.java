@@ -1,16 +1,11 @@
 package sample.dataLayer;
 
 import com.sun.source.tree.Tree;
-import sample.businessLayer.DeliveryService;
-import sample.businessLayer.MenuItem;
-import sample.businessLayer.OrderAlphabetically;
-import sample.businessLayer.User;
+import sample.businessLayer.*;
+import sample.presentationLayer.EmployeeController;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Deserializator implements Serializable {
     public static List<User>loadInfoUsers(){
@@ -56,5 +51,48 @@ public class Deserializator implements Serializable {
             e.printStackTrace();
         }
         return menuItems;
+    }
+    public static List<EmployeeController>loadInfoEmployees(){
+        List<EmployeeController> users=new ArrayList<>();
+        FileInputStream file = null;
+        try {
+            file = new FileInputStream("employees.txt");
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
+        try {
+            if(file.available()>0) {
+                ObjectInputStream in = new ObjectInputStream(file);
+                users = (List) in.readObject();
+                //DeliveryService.listOfUsers = users;
+                in.close();
+            }
+
+            file.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+    public static Map<Order,ArrayList<MenuItem>> loadInfoOrders(){
+       Map<Order,ArrayList<MenuItem>> orderMap=new HashMap<>();
+        FileInputStream file = null;
+        try {
+            file = new FileInputStream("orders.txt");
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
+        try {
+            if(file.available()>0) {
+                ObjectInputStream in = new ObjectInputStream(file);
+               orderMap = (Map) in.readObject();
+                in.close();
+            }
+
+            file.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return orderMap;
     }
 }

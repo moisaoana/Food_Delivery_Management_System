@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import sample.businessLayer.Order;
 import sample.start.Main;
 import sample.businessLayer.DeliveryService;
 import sample.businessLayer.User;
@@ -105,11 +106,14 @@ public class LoginController {
                             Scene clientScene=initializeClientScene(user);
                             main.setScene(clientScene);
 
-
                         }else if(user.getType().equals("Administrator")){
                             main.setScene(adminScene);
                         }else{
-                            //todo
+                            for(EmployeeController employeeController:DeliveryService.observers){
+                                if(user.getID()==employeeController.getUser().getID()){
+                                    employeeController.showScene();
+                                }
+                            }
                         }
                         clearAll();
                     }else{

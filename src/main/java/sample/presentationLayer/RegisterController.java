@@ -110,6 +110,12 @@ public class RegisterController {
                 } else {
                     newUser = new User(DeliveryService.listOfUsers.size() + 1, username, password, type);
                 }
+                if(newUser.getType().equals("Employee")){
+                  EmployeeController employeeController=new EmployeeController(newUser);
+                  DeliveryService.observers.add(employeeController);
+                  main.deliveryService.addListener(employeeController);
+                  Serializator.writeToFileEmployees(DeliveryService.observers,"employees.txt");
+                }
                 System.out.println(newUser.getID() + " " + newUser.getUsername() + " " + newUser.getPassword() + " " + newUser.getType());
                 DeliveryService.listOfUsers.add(newUser);
                 clearAll();

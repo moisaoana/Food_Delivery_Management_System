@@ -56,7 +56,7 @@ public class Main extends Application {
         Scene loginScene = new Scene(rootLogin, 450, 500);
         Scene registerScene=new Scene(rootRegister,450,500);
       //  Scene clientScene=new Scene(rootClient,730,640);
-        Scene adminScene=new Scene(rootAdmin,870,700);
+        Scene adminScene=new Scene(rootAdmin,870,800);
         /*
         controllerClient.setMain(this);
         controllerClient.setStartScene(startScene);

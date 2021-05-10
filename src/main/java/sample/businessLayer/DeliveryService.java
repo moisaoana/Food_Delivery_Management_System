@@ -6,9 +6,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import sample.dataLayer.Deserializator;
 import sample.dataLayer.Serializator;
+import sample.presentationLayer.EmployeeController;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,12 +28,19 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
     public static Set<MenuItem> allMenuItems=new TreeSet<>(new OrderAlphabetically());
     public static Set<BaseProduct> allBaseProducts=new TreeSet<>(new OrderAlphabetically());
     private PropertyChangeSupport propertyChangeSupport;
-    private String alert;
+    public static List<EmployeeController>observers=new ArrayList<>();
+    private Order alert;
+    //private ArrayList<MenuItem> alert2;
 
     public DeliveryService(){
         listOfUsers= Deserializator.loadInfoUsers();
         allMenuItems=Deserializator.loadInfoMenuItems();
         propertyChangeSupport=new PropertyChangeSupport(this);
+        observers=Deserializator.loadInfoEmployees();
+        for(EmployeeController employeeController: observers){
+            addListener(employeeController);
+        }
+        orders=Deserializator.loadInfoOrders();
     }
     public void addListener(PropertyChangeListener propertyChangeListener) {
         propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
@@ -40,9 +49,11 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
     public void removeListener(PropertyChangeListener propertyChangeListener) {
         propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
     }
-    public void setAlert(String value) {
-        propertyChangeSupport.firePropertyChange("alert", this.alert, value);
-        this.alert = value;
+    public void setAlert(Order order) {
+        propertyChangeSupport.firePropertyChange("alert", this.alert, order);
+       // propertyChangeSupport.firePropertyChange("alert2", this.alert2, list);
+        this.alert = order;
+       // this.alert2=list;
     }
 
     @Override
@@ -155,19 +166,82 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
     }
 
     @Override
+    public void generateReport1(int startHour, int endHour) {
+        try {
+            FileWriter fileWriter = new FileWriter("report.txt",false);
+            fileWriter.write("REPORT-"+"Orders between "+startHour+" and "+endHour+"\n");
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        orders.entrySet().stream().filter(entry->entry.getKey().getOrderDate().getHour()>=startHour && entry.getKey().getOrderDate().getHour()<endHour)
+                                 .forEach(entry->writeOrderToFile(entry.getKey(),entry.getValue()));
+    }
+
+    @Override
+    public void generateReport2(int number) {
+        try {
+            FileWriter fileWriter = new FileWriter("report.txt",false);
+            fileWriter.write("REPORT-"+"Products ordered more than "+number+" times\n");
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //allMenuItems.stream().filter(item->orders.entrySet().stream().filter(entry->entry.getValue().stream().filter(p->p.equals(item)).collect(Collectors.toList()))).forEach();
+       // count =orders.values().stream().forEach(list->list.stream().filter(item-> item.equals())).count();
+        int count = 0;
+        //allMenuItems.stream().forEach(mi->orders.values().stream().filter(list-> list.stream().filter(item->item.equals(mi))).count());
+    }
+
+    @Override
+    public void generateReport3() {
+
+    }
+
+    @Override
+    public void generateReport4() {
+
+    }
+    private void writeOrderToFile(Order order, ArrayList<MenuItem>menuItems){
+        try {
+            FileWriter fileWriter = new FileWriter("report.txt",true);
+            fileWriter.write("Order ID: "+order.getOrderID()+"\n");
+            fileWriter.write("Date: "+order.getOrderDate().getDay()+"."+order.getOrderDate().getMonth()+"."+order.getOrderDate().getYear()+" "+order.getOrderDate().getHour()+":"+order.getOrderDate().getMinutes()+":"+order.getOrderDate().getSeconds()+"\n");
+            fileWriter.write("Client: "+order.getClientID()+"\nProducts: ");
+            int total=0;
+            for(MenuItem menuItem:menuItems){
+                if(menuItem instanceof BaseProduct) {
+                    fileWriter.write(((BaseProduct) menuItem).getTitle() + ", ");
+                    total+=((BaseProduct) menuItem).getPrice();
+                }else if(menuItem instanceof CompositeProduct) {
+                    fileWriter.write(((CompositeProduct) menuItem).getTitle() + ", ");
+                    total+=((CompositeProduct) menuItem).getPrice();
+                }
+            }
+            fileWriter.write("\nTotal: "+total+"\n");
+            fileWriter.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public Date makeAnOrder(ObservableList<MenuItem> orderedItems, User user) {//not done
         int orderId = generateOrderId();
         LocalDate localDate = LocalDate.now();
         LocalTime localTime= LocalTime.now();
         Date date=new Date(localDate.getDayOfMonth(),localDate.getMonthValue(),localDate.getYear(),localTime.getHour(),localTime.getMinute(),localTime.getSecond());
-        /*
+
         Order newOrder=new Order(orderId,user.getID(),date);
         ArrayList<MenuItem> listOfOrderedItems = new ArrayList<>(orderedItems);
         orders.put(newOrder,listOfOrderedItems);
         Serializator.writeToFileMap(orders,"orders.txt");
 
-         */
-
+        for(EmployeeController employeeController: observers){
+           // System.out.println(newOrder.getOrderID());
+            setAlert(newOrder);
+        }
         return date;
 
     }

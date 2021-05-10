@@ -1,8 +1,9 @@
 package sample.businessLayer;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Order {
+public class Order implements Serializable {
     private int orderID;
     private int clientID;
     private Date orderDate;
