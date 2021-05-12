@@ -2,22 +2,18 @@ package sample.presentationLayer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.InputMethodEvent;
 import javafx.util.Callback;
 import sample.businessLayer.BaseProduct;
 import sample.businessLayer.CompositeProduct;
 import sample.businessLayer.DeliveryService;
 import sample.businessLayer.MenuItem;
-import sample.dataLayer.Serializator;
 import sample.start.Main;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -173,24 +169,34 @@ public class AdministratorController implements Initializable {
     @FXML
     private Button generateReport4;
     @FXML
+    private TextField monthTF;
+    @FXML
+    private TextField yearTF;
+    @FXML
     void clickModify(ActionEvent event) {
         if(addTitleTextField.getText().isEmpty() || addRatingTextField.getText().isEmpty() || addCaloriesTextField.getText().isEmpty() || addProteinTextField.getText().isEmpty() || addFatTextField.getText().isEmpty() || addSodiumTextField.getText().isEmpty() ||addPriceTextField.getText().isEmpty()){
             new ErrorMessage("Please fill all the required information!");
         }else {
             String title=addTitleTextField.getText();
-            double rating=Double.parseDouble(addRatingTextField.getText());
-            int calories=Integer.parseInt(addCaloriesTextField.getText());
-            int protein=Integer.parseInt(addProteinTextField.getText());
-            int fat=Integer.parseInt(addFatTextField.getText());
-            int sodium=Integer.parseInt(addSodiumTextField.getText());
-            double price=Double.parseDouble(addPriceTextField.getText());
-            BaseProduct baseProduct=new BaseProduct(title,rating,calories,protein,fat,sodium,price);
-            main.deliveryService.modifyProductAdd(baseProduct);
-            observableListMenu.addAll(baseProduct);
-            menuTableView.refresh();
-            clearAll();
-
-
+            try {
+                double rating = Double.parseDouble(addRatingTextField.getText());
+                int calories = Integer.parseInt(addCaloriesTextField.getText());
+                int protein = Integer.parseInt(addProteinTextField.getText());
+                int fat = Integer.parseInt(addFatTextField.getText());
+                int sodium = Integer.parseInt(addSodiumTextField.getText());
+                double price = Double.parseDouble(addPriceTextField.getText());
+                BaseProduct baseProduct = new BaseProduct(title, rating, calories, protein, fat, sodium, price);
+                if(exits(baseProduct)){
+                    new ErrorMessage("This product already exists!");
+                }else {
+                    main.deliveryService.modifyProductAdd(baseProduct);
+                    observableListMenu.addAll(baseProduct);
+                    menuTableView.refresh();
+                    clearAll();
+                }
+            }catch (NumberFormatException numberFormatException) {
+                new ErrorMessage("Invalid data!");
+            }
         }
     }
 
@@ -200,21 +206,28 @@ public class AdministratorController implements Initializable {
            new ErrorMessage("Please fill all the required information!");
        }else{
            String title=addTitleTextField.getText();
-           double rating=Double.parseDouble(addRatingTextField.getText());
-           int calories=Integer.parseInt(addCaloriesTextField.getText());
-           int protein=Integer.parseInt(addProteinTextField.getText());
-           int fat=Integer.parseInt(addFatTextField.getText());
-           int sodium=Integer.parseInt(addSodiumTextField.getText());
-           double price=Double.parseDouble(addPriceTextField.getText());
-           if(rating<0 || rating>5 || calories<0 || protein<0 || fat<0 || sodium<0 || price<=0){
-               new ErrorMessage("Incorrect data!");
-           }else{
-              BaseProduct baseProduct=new BaseProduct(title,rating,calories,protein,fat,sodium,price);
-              main.deliveryService.addNewBaseProduct(baseProduct);
-              observableListMenu.add(baseProduct);
-              menuTableView.refresh();
-              clearAll();
-
+           try {
+               double rating = Double.parseDouble(addRatingTextField.getText());
+               int calories = Integer.parseInt(addCaloriesTextField.getText());
+               int protein = Integer.parseInt(addProteinTextField.getText());
+               int fat = Integer.parseInt(addFatTextField.getText());
+               int sodium = Integer.parseInt(addSodiumTextField.getText());
+               double price = Double.parseDouble(addPriceTextField.getText());
+               if (rating < 0 || rating > 5 || calories < 0 || protein < 0 || fat < 0 || sodium < 0 || price <= 0) {
+                   new ErrorMessage("Incorrect data!");
+               } else {
+                   BaseProduct baseProduct = new BaseProduct(title, rating, calories, protein, fat, sodium, price);
+                   if (exits(baseProduct)) {
+                       new ErrorMessage("This product already exists!");
+                   }else {
+                       main.deliveryService.addNewBaseProduct(baseProduct);
+                       observableListMenu.add(baseProduct);
+                       menuTableView.refresh();
+                       clearAll();
+                   }
+               }
+           }catch (NumberFormatException numberFormatException) {
+               new ErrorMessage("Invalid data!");
            }
        }
 
@@ -228,7 +241,6 @@ public class AdministratorController implements Initializable {
         addSodiumTextField.clear();
         addPriceTextField.clear();
     }
-
 
     @FXML
     void clickBack(ActionEvent event) {
@@ -250,9 +262,7 @@ public class AdministratorController implements Initializable {
                  menuTableView.refresh();
                  observableListChosenItems.clear();
                  nameTextField.clear();
-
             }
-
         }
     }
 
@@ -278,7 +288,6 @@ public class AdministratorController implements Initializable {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         chosenTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         chosenPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-
         observableListMenu.addAll(menuItems);
         menuTableView.setItems(observableListMenu);
         chosenItemsTableView.setItems((ObservableList<MenuItem>) observableListChosenItems);
@@ -435,9 +444,19 @@ public class AdministratorController implements Initializable {
         if(startHourTF.getText().isEmpty() || endHourTF.getText().isEmpty()){
             new ErrorMessage("Please fill all the required information!");
         }else{
-            int startHour=Integer.parseInt(startHourTF.getText());
-            int endHour=Integer.parseInt(endHourTF.getText());
-            main.deliveryService.generateReport1(startHour,endHour);
+            try {
+                int startHour = Integer.parseInt(startHourTF.getText());
+                int endHour = Integer.parseInt(endHourTF.getText());
+                if(startHour>=endHour){
+                    new ErrorMessage("Start Hour<End Hour");
+                }else {
+                    main.deliveryService.generateReport1(startHour, endHour);
+                    startHourTF.clear();
+                    endHourTF.clear();
+                }
+            }catch (NumberFormatException numberFormatException) {
+                new ErrorMessage("Invalid data!");
+            }
         }
     }
 
@@ -446,22 +465,89 @@ public class AdministratorController implements Initializable {
         if(numberTF.getText().isEmpty()){
             new ErrorMessage("Please fill all the required information!");
         }else{
-
+            try {
+                int nrOfTimesOrdered = Integer.parseInt(numberTF.getText());
+                main.deliveryService.generateReport2(nrOfTimesOrdered);
+                numberTF.clear();
+            }catch (NumberFormatException numberFormatException) {
+                new ErrorMessage("Invalid data!");
+            }
         }
     }
 
     @FXML
     void clickGenerateReport3(ActionEvent event) {
-
+        if(sumTF.getText().isEmpty() || nrOfOrdersTF.getText().isEmpty()){
+            new ErrorMessage("Please fill all the required information!");
+        }else{
+            try {
+                int nrOfOrders = Integer.parseInt(nrOfOrdersTF.getText());
+                double sum = Double.parseDouble(sumTF.getText());
+                main.deliveryService.generateReport3(nrOfOrders,sum);
+                nrOfOrdersTF.clear();
+                sumTF.clear();
+            }catch (NumberFormatException numberFormatException) {
+                new ErrorMessage("Invalid data!");
+            }
+        }
     }
 
     @FXML
     void clickGenerateReport4(ActionEvent event) {
-
+        if(dayTF.getText().isEmpty() || monthTF.getText().isEmpty()|| yearTF.getText().isEmpty()){
+            new ErrorMessage("Please fill all the required information!");
+        }else{
+            try {
+                int day=Integer.parseInt(dayTF.getText());
+                int month=Integer.parseInt(monthTF.getText());
+                int year=Integer.parseInt(yearTF.getText());
+                if(day<1 || day>31){
+                    new ErrorMessage("Invalid day!");
+                }else{
+                    if(month<1 || month>12){
+                        new ErrorMessage("Invalid month!");
+                    }else{
+                        main.deliveryService.generateReport4(day,month,year);
+                        dayTF.clear();
+                        monthTF.clear();
+                        yearTF.clear();
+                    }
+                }
+            } catch (NumberFormatException numberFormatException) {
+                new ErrorMessage("Invalid data!");
+            }
+        }
     }
-
-
-
+    private boolean exits(MenuItem mi) {
+        if (mi instanceof BaseProduct) {
+            for (MenuItem menuItem : DeliveryService.allMenuItems) {
+                if (menuItem instanceof BaseProduct) {
+                    if (((BaseProduct) menuItem).getTitle().equals(((BaseProduct) mi).getTitle())) {
+                        return true;
+                    }
+                } else if (menuItem instanceof CompositeProduct) {
+                    if (((CompositeProduct) menuItem).getTitle().equals(((BaseProduct) mi).getTitle())) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }else if(mi instanceof CompositeProduct){
+            for (MenuItem menuItem : DeliveryService.allMenuItems) {
+                if (menuItem instanceof BaseProduct) {
+                    if (((BaseProduct) menuItem).getTitle().equals(((CompositeProduct) mi).getTitle())) {
+                        return true;
+                    }
+                } else if (menuItem instanceof CompositeProduct) {
+                    if (((CompositeProduct) menuItem).getTitle().equals(((CompositeProduct) mi).getTitle())) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return false;
+    }
 }
 
 

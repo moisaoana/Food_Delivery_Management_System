@@ -20,7 +20,6 @@ public class Deserializator implements Serializable {
             if(file.available()>0) {
                 ObjectInputStream in = new ObjectInputStream(file);
                 users = (List) in.readObject();
-                //DeliveryService.listOfUsers = users;
                 in.close();
             }
 
@@ -42,7 +41,6 @@ public class Deserializator implements Serializable {
             if(file.available()>0) {
                 ObjectInputStream in = new ObjectInputStream(file);
                menuItems = (Set) in.readObject();
-                //DeliveryService.listOfUsers = users;
                 in.close();
             }
 
@@ -64,7 +62,6 @@ public class Deserializator implements Serializable {
             if(file.available()>0) {
                 ObjectInputStream in = new ObjectInputStream(file);
                 users = (List) in.readObject();
-                //DeliveryService.listOfUsers = users;
                 in.close();
             }
 

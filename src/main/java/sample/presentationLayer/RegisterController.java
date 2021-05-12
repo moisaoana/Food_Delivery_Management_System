@@ -116,7 +116,6 @@ public class RegisterController {
                   main.deliveryService.addListener(employeeController);
                   Serializator.writeToFileEmployees(DeliveryService.observers,"employees.txt");
                 }
-                System.out.println(newUser.getID() + " " + newUser.getUsername() + " " + newUser.getPassword() + " " + newUser.getType());
                 DeliveryService.listOfUsers.add(newUser);
                 clearAll();
                 main.setScene(startScene);

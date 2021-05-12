@@ -46,5 +46,4 @@ public class StartController {
     void clickRegister(ActionEvent event) {
         main.setScene(registerScene);
     }
-
 }

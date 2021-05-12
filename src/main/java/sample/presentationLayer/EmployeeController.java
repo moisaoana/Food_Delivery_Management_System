@@ -55,7 +55,7 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
         this.setHeight(500);
         this.setWidth(500);
         Scene scene = new Scene(tableView);
-        this.setTitle("Employee Profile");
+        this.setTitle("Pending Orders");
         this.setScene(scene);
         this.show();
     }

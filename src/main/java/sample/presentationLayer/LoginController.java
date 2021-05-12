@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import sample.businessLayer.Order;
 import sample.start.Main;
 import sample.businessLayer.DeliveryService;
 import sample.businessLayer.User;
@@ -23,7 +22,6 @@ public class LoginController {
     private Main main;
     private Scene registerScene;
     private Scene startScene;
-    //private Scene clientScene;
     private Scene adminScene;
     public void setMain(Main main){
         this.main = main;
@@ -34,9 +32,6 @@ public class LoginController {
     public void setRegisterScene(Scene scene1){
         this.registerScene = scene1;
     }
-    //public void setClientScene(Scene scene1){
-      // this.clientScene = scene1;
-   // }
     public void setAdminScene(Scene scene1){
         this.adminScene = scene1;
     }
@@ -146,11 +141,9 @@ public class LoginController {
             controllerClient.setAdminScene(adminScene);
             controllerClient.setUser(user);
             return clientScene;
-
         } catch (IOException e) {
             e.printStackTrace();
         }
        return null;
     }
-
 }

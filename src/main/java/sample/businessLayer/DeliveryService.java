@@ -7,10 +7,8 @@ import javafx.scene.control.TextField;
 import sample.dataLayer.Deserializator;
 import sample.dataLayer.Serializator;
 import sample.presentationLayer.EmployeeController;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -67,7 +65,6 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         }
         allMenuItems.addAll(allBaseProducts);
         Serializator.writeToFileSet(allMenuItems,"menuitems.txt");
-
     }
 
     @Override
@@ -187,22 +184,58 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        //allMenuItems.stream().filter(item->orders.entrySet().stream().filter(entry->entry.getValue().stream().filter(p->p.equals(item)).collect(Collectors.toList()))).forEach();
-       // count =orders.values().stream().forEach(list->list.stream().filter(item-> item.equals())).count();
-        int count = 0;
-        //allMenuItems.stream().forEach(mi->orders.values().stream().filter(list-> list.stream().filter(item->item.equals(mi))).count());
+        List<MenuItem> allItems=new ArrayList<>();
+        List<MenuItem>menuItemsUnique;
+        orders.values().stream().forEach(allItems::addAll);
+        menuItemsUnique=allItems.stream().distinct().collect(Collectors.toList());
+        menuItemsUnique.stream().forEach((i)->{long c=allItems.stream().filter(p->p.equals(i)).count();if(c>=number)writeReport4(i,c);});
     }
 
     @Override
-    public void generateReport3() {
-
+    public void generateReport3(int nrOfOrders, double sum) {
+        try {
+            FileWriter fileWriter = new FileWriter("report.txt",false);
+            fileWriter.write("REPORT-"+"Clients that have ordered more than "+nrOfOrders+" times and\n value of the order is greater than "+sum+"\n");
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<Integer> clientsUnique;
+        clientsUnique=orders.entrySet().stream().filter(e->computeOrderTotal(e.getValue())>sum).map(Map.Entry::getKey).map(Order::getClientID).distinct().collect(Collectors.toList());
+        clientsUnique.stream().forEach((i)->{long c= orders.keySet().stream().map(Order::getClientID).filter(id->id.equals(i)).count();if(c>=nrOfOrders)writeReport3(i,c);});
     }
 
     @Override
-    public void generateReport4() {
-
+    public void generateReport4(int day,int month,int year) {
+        try {
+            FileWriter fileWriter = new FileWriter("report.txt",false);
+            fileWriter.write("REPORT-"+"Products ordered at "+day+"."+month+"."+year+"\n");
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<MenuItem>menuItemsLocal=new ArrayList<>();
+        List<MenuItem>menuItemsUnique;
+        orders.entrySet().stream().filter(entry->entry.getKey().getOrderDate().getDay()==day && entry.getKey().getOrderDate().getMonth()==month && entry.getKey().getOrderDate().getYear()==year)
+                .map(Map.Entry::getValue)
+                .forEach(menuItemsLocal::addAll);
+        menuItemsUnique=menuItemsLocal.stream().distinct().collect(Collectors.toList());
+        menuItemsUnique.stream().forEach((i)->{long c=menuItemsLocal.stream().filter(p->p.equals(i)).count();writeReport4(i,c);});
     }
+
+    @Override
+    public double computeOrderTotal(ArrayList<MenuItem> menuItems) {
+        double sum=0;
+        for(MenuItem menuItem: menuItems){
+            if(menuItem instanceof BaseProduct){
+                sum+=((BaseProduct) menuItem).getPrice();
+            }else if(menuItem instanceof CompositeProduct){
+                sum+=((CompositeProduct) menuItem).getPrice();
+            }
+        }
+        return sum;
+    }
+
     private void writeOrderToFile(Order order, ArrayList<MenuItem>menuItems){
         try {
             FileWriter fileWriter = new FileWriter("report.txt",true);
@@ -232,14 +265,11 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         LocalDate localDate = LocalDate.now();
         LocalTime localTime= LocalTime.now();
         Date date=new Date(localDate.getDayOfMonth(),localDate.getMonthValue(),localDate.getYear(),localTime.getHour(),localTime.getMinute(),localTime.getSecond());
-
         Order newOrder=new Order(orderId,user.getID(),date);
         ArrayList<MenuItem> listOfOrderedItems = new ArrayList<>(orderedItems);
         orders.put(newOrder,listOfOrderedItems);
         Serializator.writeToFileMap(orders,"orders.txt");
-
         for(EmployeeController employeeController: observers){
-           // System.out.println(newOrder.getOrderID());
             setAlert(newOrder);
         }
         return date;
@@ -253,4 +283,27 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         }
     }
 
+    private void writeReport4(MenuItem menuItem, long nr){
+        try {
+            FileWriter fileWriter = new FileWriter("report.txt",true);
+            if(menuItem instanceof BaseProduct) {
+                fileWriter.write(((BaseProduct) menuItem).getTitle()+", ordered "+nr+" times\n");
+            }else if(menuItem instanceof CompositeProduct){
+                fileWriter.write(((CompositeProduct) menuItem).getTitle()+", ordered "+nr+" times\n");
+            }
+            fileWriter.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void writeReport3(int i, long nr){
+        try {
+            FileWriter fileWriter = new FileWriter("report.txt",true);
+            Optional<User> client=listOfUsers.stream().filter(u->u.getID()==i).findFirst();
+            fileWriter.write(client.get().getUsername()+" ordered "+nr+" times\n");
+            fileWriter.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

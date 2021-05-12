@@ -1,5 +1,7 @@
 package sample.businessLayer;
 
+import java.util.Objects;
+
 public class BaseProduct extends MenuItem{
     private String title;
     private double rating;
@@ -87,5 +89,24 @@ public class BaseProduct extends MenuItem{
     @Override
     public double computePrice() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseProduct that = (BaseProduct) o;
+        return Double.compare(that.rating, rating) == 0 &&
+                calories == that.calories &&
+                protein == that.protein &&
+                fat == that.fat &&
+                sodium == that.sodium &&
+                Double.compare(that.price, price) == 0 &&
+                Objects.equals(title, that.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, rating, calories, protein, fat, sodium, price);
     }
 }

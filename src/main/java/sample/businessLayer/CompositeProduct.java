@@ -1,6 +1,7 @@
 package sample.businessLayer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -60,4 +61,18 @@ public class CompositeProduct extends MenuItem{
         this.price = price;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CompositeProduct that = (CompositeProduct) o;
+        return Double.compare(that.price, price) == 0 &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(productsList, that.productsList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, productsList, price);
+    }
 }

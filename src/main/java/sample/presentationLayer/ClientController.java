@@ -1,7 +1,5 @@
 package sample.presentationLayer;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,17 +8,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.InputMethodEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import sample.businessLayer.*;
 import sample.businessLayer.MenuItem;
 import sample.start.Main;
-
-import java.lang.reflect.Field;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -143,7 +135,6 @@ public class ClientController  implements Initializable {
         main.setScene(startScene);
     }
 
-
     @FXML
     void clickOrder(ActionEvent event) {
         Date date=main.deliveryService.makeAnOrder(observableListOrder,user);
@@ -185,8 +176,6 @@ public class ClientController  implements Initializable {
         menuTableView.setItems(observableListSimple);
         composedTableView.setItems(observableListComposite);
         orderTableView.setItems(observableListOrder);
-
-
     }
     public void  addButtons(TableView<MenuItem> tableView,TableView<MenuItem>tableView2,ObservableList<MenuItem>observableList)
     {

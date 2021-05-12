@@ -151,10 +151,12 @@
          </font>
       </Label>
       <TextField fx:id="dayTF" layoutX="11.0" layoutY="612.0" prefHeight="25.0" prefWidth="54.0" promptText="Day" />
-      <Button fx:id="generateReport4" layoutX="130.0" layoutY="612.0" mnemonicParsing="false" onAction="#clickGenerateReport4" prefHeight="23.0" prefWidth="94.0" style="-fx-background-color: darksalmon;" text="GENERATE" textFill="WHITE">
+      <Button fx:id="generateReport4" layoutX="230.0" layoutY="613.0" mnemonicParsing="false" onAction="#clickGenerateReport4" prefHeight="23.0" prefWidth="94.0" style="-fx-background-color: darksalmon;" text="GENERATE" textFill="WHITE">
          <font>
             <Font name="Kristen ITC" size="11.0" />
          </font>
       </Button>
+      <TextField fx:id="monthTF" layoutX="80.0" layoutY="613.0" prefHeight="25.0" prefWidth="54.0" promptText="Month" />
+      <TextField fx:id="yearTF" layoutX="150.0" layoutY="612.0" prefHeight="25.0" prefWidth="54.0" promptText="Year" />
    </children>
 </AnchorPane>
