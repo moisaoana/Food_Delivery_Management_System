@@ -162,9 +162,10 @@ public class ClientController  implements Initializable {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         composedTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         composedPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        //compositionComposedColumn.setCellValueFactory(new PropertyValueFactory<>("productsList"));
+        compositionComposedColumn.setCellValueFactory(new PropertyValueFactory<>("printableList"));
         orderTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
        orderPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+       compositionComposedColumn.setPrefWidth(800.0);
         for(MenuItem menuItem: menuItems){
             if(menuItem instanceof BaseProduct){
                 observableListSimple.add( menuItem);

@@ -57,5 +57,4 @@ public class User implements Serializable {
         this.type = type;
     }
 
-
 }

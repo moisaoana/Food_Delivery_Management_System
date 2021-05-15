@@ -2,16 +2,14 @@ package sample.businessLayer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class CompositeProduct extends MenuItem{
     private String title;
     private List<MenuItem> productsList=new ArrayList<MenuItem>();
     private double price;
+    private String printableList;
     public CompositeProduct(String name) {
         this.title = name;
-        //price=computePrice();
     }
 
     public void  addProduct(MenuItem menuItem){
@@ -74,5 +72,22 @@ public class CompositeProduct extends MenuItem{
     @Override
     public int hashCode() {
         return Objects.hash(title, productsList, price);
+    }
+
+    public String getPrintableList() {
+        return printableList;
+    }
+
+    public void setPrintableList() {
+        StringBuilder stringBuilder=new StringBuilder();
+        for(MenuItem menuItem :productsList){
+            if(menuItem instanceof BaseProduct){
+                stringBuilder.append("| ").append(((BaseProduct) menuItem).getTitle());
+            }else if(menuItem instanceof  CompositeProduct){
+                stringBuilder.append("| ").append(((CompositeProduct) menuItem).getTitle());
+            }
+
+        }
+        printableList=stringBuilder.toString();
     }
 }

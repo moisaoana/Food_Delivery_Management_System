@@ -130,5 +130,4 @@ public class RegisterController {
         chooseType.setItems(typesList);
     }
 
-
 }

@@ -26,11 +26,11 @@
             <TableColumn fx:id="priceColumn" prefWidth="65.5" text="Price" />
         </columns>
       </TableView>
-      <TableView fx:id="composedTableView" layoutX="10.0" layoutY="349.0" prefHeight="142.0" prefWidth="696.0">
+      <TableView fx:id="composedTableView" layoutX="10.0" layoutY="339.0" prefHeight="152.0" prefWidth="696.0">
         <columns>
             <TableColumn fx:id="composedTitleColumn" prefWidth="231.5" text="Title" />
-          <TableColumn fx:id="composedPriceColumn" minWidth="1.5" prefWidth="174.0" text="Price" />
-            <TableColumn fx:id="compositionComposedColumn" prefWidth="235.5" text="Composition" />
+          <TableColumn fx:id="composedPriceColumn" minWidth="1.5" prefWidth="72.0" text="Price" />
+            <TableColumn fx:id="compositionComposedColumn" prefWidth="320.0" text="Composition" />
         </columns>
       </TableView>
       <Label fx:id="menuLabel" layoutX="19.0" layoutY="46.0" style="-fx-border-color: darksalmon; -fx-border-width: 5;" text="BASIC MENU ITMES" textFill="WHITE">
@@ -110,7 +110,7 @@
             <Font name="Kristen ITC" size="10.0" />
          </font>
       </TextField>
-      <TextField fx:id="searchByPriceCompositeTextField" layoutX="244.0" layoutY="310.0" prefHeight="27.0" prefWidth="171.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
+      <TextField fx:id="searchByPriceCompositeTextField" layoutX="244.0" layoutY="310.0" prefHeight="27.0" prefWidth="68.0" promptText="SEARCH" style="-fx-background-color: floralwhite;">
          <font>
             <Font name="Kristen ITC" size="10.0" />
          </font>

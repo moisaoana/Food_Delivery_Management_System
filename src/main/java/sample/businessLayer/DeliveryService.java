@@ -28,7 +28,7 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
     private PropertyChangeSupport propertyChangeSupport;
     public static List<EmployeeController>observers=new ArrayList<>();
     private Order alert;
-    //private ArrayList<MenuItem> alert2;
+    private ArrayList<MenuItem> alert2;
 
     public DeliveryService(){
         listOfUsers= Deserializator.loadInfoUsers();
@@ -49,9 +49,11 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
     }
     public void setAlert(Order order) {
         propertyChangeSupport.firePropertyChange("alert", this.alert, order);
-       // propertyChangeSupport.firePropertyChange("alert2", this.alert2, list);
         this.alert = order;
-       // this.alert2=list;
+    }
+    public void setAlert2(ArrayList<MenuItem> list){
+        propertyChangeSupport.firePropertyChange("alert2", this.alert2, list);
+        this.alert2=list;
     }
 
     @Override
@@ -65,17 +67,22 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         }
         allMenuItems.addAll(allBaseProducts);
         Serializator.writeToFileSet(allMenuItems,"menuitems.txt");
+        assert !allBaseProducts.isEmpty() && !allMenuItems.isEmpty();
     }
 
     @Override
     public  CompositeProduct addNewCompositeItem(ObservableList<MenuItem> menuItems,String name) {
+        assert  menuItems.size()>0 && name!=null;
+        int oldSize=allMenuItems.size();
         CompositeProduct compositeProduct=new CompositeProduct(name);
         for(MenuItem menuItem: menuItems) {
             compositeProduct.addProduct(menuItem);
         }
         compositeProduct.setPrice(compositeProduct.computePrice());
+        compositeProduct.setPrintableList();
         allMenuItems.add(compositeProduct);
         Serializator.writeToFileSet(DeliveryService.allMenuItems,"menuitems.txt");
+        assert allMenuItems.size()==oldSize+1;
         return compositeProduct;
     }
 
@@ -85,23 +92,32 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         int preSize=DeliveryService.allMenuItems.size();
         DeliveryService.allMenuItems.add(baseProduct);
         Serializator.writeToFileSet(DeliveryService.allMenuItems,"menuitems.txt");
-        assert allMenuItems.size()==preSize+1;
+        assert allMenuItems.size()==preSize+1 && allMenuItems.contains(baseProduct);
     }
 
     @Override
     public void removeProduct(MenuItem menuItem) {
+        assert menuItem!=null && allMenuItems.size()>0 && allMenuItems.contains(menuItem);
+        int oldSize=allMenuItems.size();
         DeliveryService.allMenuItems.remove(menuItem);
         Serializator.writeToFileSet(DeliveryService.allMenuItems,"menuitems.txt");
+        assert allMenuItems.size() ==oldSize - 1 && !allMenuItems.contains(menuItem);
     }
 
     @Override
     public void modifyProductDelete(MenuItem menuItemOld) {
+        assert menuItemOld!=null && allMenuItems.contains(menuItemOld);
+        int oldSize=allMenuItems.size();
         DeliveryService.allMenuItems.remove(menuItemOld);
+        assert !allMenuItems.contains(menuItemOld) && allMenuItems.size()==oldSize-1;
     }
     @Override
     public void modifyProductAdd( MenuItem menuItemNew) {
+        assert menuItemNew!=null;
+        int oldSize=allMenuItems.size();
         DeliveryService.allMenuItems.add(menuItemNew);
         Serializator.writeToFileSet(DeliveryService.allMenuItems,"menuitems.txt");
+        assert allMenuItems.contains(menuItemNew) && allMenuItems.size()==oldSize+1;
     }
 
     @Override
@@ -138,6 +154,7 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
 
     @Override
     public void createBill(ObservableList<MenuItem> menuItems, User user,Date date) {
+        assert !menuItems.isEmpty() && user!=null && date!=null;
         try {
             FileWriter fileWriter1 = new FileWriter("bill.txt",false);
             fileWriter1.write("Order bill\n");
@@ -164,6 +181,7 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
 
     @Override
     public void generateReport1(int startHour, int endHour) {
+        assert startHour>0 && endHour<24 && startHour<endHour;
         try {
             FileWriter fileWriter = new FileWriter("report.txt",false);
             fileWriter.write("REPORT-"+"Orders between "+startHour+" and "+endHour+"\n");
@@ -177,6 +195,7 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
 
     @Override
     public void generateReport2(int number) {
+        assert number>=0;
         try {
             FileWriter fileWriter = new FileWriter("report.txt",false);
             fileWriter.write("REPORT-"+"Products ordered more than "+number+" times\n");
@@ -193,6 +212,7 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
 
     @Override
     public void generateReport3(int nrOfOrders, double sum) {
+        assert nrOfOrders>=0 &&  sum>0;
         try {
             FileWriter fileWriter = new FileWriter("report.txt",false);
             fileWriter.write("REPORT-"+"Clients that have ordered more than "+nrOfOrders+" times and\n value of the order is greater than "+sum+"\n");
@@ -207,6 +227,7 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
 
     @Override
     public void generateReport4(int day,int month,int year) {
+        assert day>0 && day<32 && month>0 && month<13;
         try {
             FileWriter fileWriter = new FileWriter("report.txt",false);
             fileWriter.write("REPORT-"+"Products ordered at "+day+"."+month+"."+year+"\n");
@@ -221,10 +242,12 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
                 .forEach(menuItemsLocal::addAll);
         menuItemsUnique=menuItemsLocal.stream().distinct().collect(Collectors.toList());
         menuItemsUnique.stream().forEach((i)->{long c=menuItemsLocal.stream().filter(p->p.equals(i)).count();writeReport4(i,c);});
+
     }
 
     @Override
     public double computeOrderTotal(ArrayList<MenuItem> menuItems) {
+        assert !menuItems.isEmpty();
         double sum=0;
         for(MenuItem menuItem: menuItems){
             if(menuItem instanceof BaseProduct){
@@ -233,7 +256,33 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
                 sum+=((CompositeProduct) menuItem).getPrice();
             }
         }
+        assert sum!=0;
         return sum;
+    }
+    @Override
+    public Date makeAnOrder(ObservableList<MenuItem> orderedItems, User user) {//not done
+        int orderId = generateOrderId();
+        LocalDate localDate = LocalDate.now();
+        LocalTime localTime= LocalTime.now();
+        Date date=new Date(localDate.getDayOfMonth(),localDate.getMonthValue(),localDate.getYear(),localTime.getHour(),localTime.getMinute(),localTime.getSecond());
+        Order newOrder=new Order(orderId,user.getID(),date);
+        ArrayList<MenuItem> listOfOrderedItems = new ArrayList<>(orderedItems);
+        orders.put(newOrder,listOfOrderedItems);
+        Serializator.writeToFileMap(orders,"orders.txt");
+        for(EmployeeController employeeController: observers){
+            setAlert(newOrder);
+            setAlert2(listOfOrderedItems);
+        }
+        return date;
+
+    }
+    @Override
+    public int generateOrderId(){
+        if(orders.size()==0){
+            return 1;
+        }else{
+            return orders.size()+1;
+        }
     }
 
     private void writeOrderToFile(Order order, ArrayList<MenuItem>menuItems){
@@ -256,30 +305,6 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
             fileWriter.close();
         }catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public Date makeAnOrder(ObservableList<MenuItem> orderedItems, User user) {//not done
-        int orderId = generateOrderId();
-        LocalDate localDate = LocalDate.now();
-        LocalTime localTime= LocalTime.now();
-        Date date=new Date(localDate.getDayOfMonth(),localDate.getMonthValue(),localDate.getYear(),localTime.getHour(),localTime.getMinute(),localTime.getSecond());
-        Order newOrder=new Order(orderId,user.getID(),date);
-        ArrayList<MenuItem> listOfOrderedItems = new ArrayList<>(orderedItems);
-        orders.put(newOrder,listOfOrderedItems);
-        Serializator.writeToFileMap(orders,"orders.txt");
-        for(EmployeeController employeeController: observers){
-            setAlert(newOrder);
-        }
-        return date;
-
-    }
-    private int generateOrderId(){
-        if(orders.size()==0){
-            return 1;
-        }else{
-            return orders.size()+1;
         }
     }
 

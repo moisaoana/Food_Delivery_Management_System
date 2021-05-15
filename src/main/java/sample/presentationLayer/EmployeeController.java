@@ -1,4 +1,5 @@
 package sample.presentationLayer;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,15 +24,18 @@ import java.util.List;
 
 public class EmployeeController extends Stage implements PropertyChangeListener, Serializable {
     private User user;
-    private Order alert;
+    //private Order alert;
     private List<Order> pendingOrders= new ArrayList<>();
     private List<ArrayList<MenuItem>>pendingItems=new ArrayList<>();
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        this.setAlert((Order) evt.getNewValue());
-        System.out.println(alert.getOrderID());
-        pendingOrders.add((Order)evt.getNewValue());
+        //this.setAlert((Order) evt.getNewValue());
+        //System.out.println(alert.getOrderID());
+        if(evt.getNewValue() instanceof Order)
+            pendingOrders.add((Order)evt.getNewValue());
+        else if(evt.getNewValue() instanceof ArrayList)
+            pendingItems.add((ArrayList<MenuItem>) evt.getNewValue());
        // pendingItems.add((ArrayList<MenuItem>) evt.getNewValue());
         Serializator.writeToFileEmployees(DeliveryService.observers,"employees.txt");
     }
@@ -41,24 +45,28 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
 
     }
     public void showScene(){
-        TableView tableView=new TableView();
+        TableView<Order> tableView=new TableView<>();
         TableColumn<Order,Integer> columnOrderID = new TableColumn<>("Order ID");
         columnOrderID.setCellValueFactory(new PropertyValueFactory<>("orderID"));
         TableColumn<Order,Integer> columnClientID = new TableColumn<>("Client ID");
         columnClientID.setCellValueFactory(new PropertyValueFactory<>("clientID"));
-        tableView.getColumns().add(columnOrderID);
-        tableView.getColumns().add(columnClientID);
+        TableColumn<Order,String> columnDate = new TableColumn<>("Date");
+        columnDate.setCellValueFactory(cellData->new SimpleStringProperty(cellData.getValue().getOrderDate().getDay()+"."+cellData.getValue().getOrderDate().getMonth()+"."+cellData.getValue().getOrderDate().getYear()+" "+cellData.getValue().getOrderDate().getHour()+":"+cellData.getValue().getOrderDate().getMinutes()+":"+cellData.getValue().getOrderDate().getSeconds()));
+        tableView.getColumns().addAll(columnOrderID,columnClientID,columnDate);
         ObservableList<Order> orderObs=FXCollections.observableArrayList();
         orderObs.addAll(pendingOrders);
         tableView.setItems(orderObs);
         addButtonsDone(tableView,orderObs);
+        addButtonsView(tableView);
         this.setHeight(500);
         this.setWidth(500);
         Scene scene = new Scene(tableView);
         this.setTitle("Pending Orders");
         this.setScene(scene);
         this.show();
+
     }
+    /*
 
     public Order getAlert() {
         return alert;
@@ -67,6 +75,8 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
     public void setAlert(Order alert) {
         this.alert = alert;
     }
+
+     */
 
     public User getUser() {
         return user;
@@ -86,14 +96,62 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
                     {
                         ClientController.styleButton(newButton);
                         newButton.setOnAction((ActionEvent event) -> {
+
                             Order order = getTableView().getItems().get(getIndex());
+                            int index=0;
+                            for(int i=0;i<pendingOrders.size();i++){
+                                if(pendingOrders.get(i).getOrderID()==order.getOrderID()){
+                                    index=i;
+                                }
+                            }
+                           // pendingItems.remove(index);
                             for(EmployeeController employeeController:DeliveryService.observers){
                                 employeeController.pendingOrders.remove(order);
+                                employeeController.pendingItems.remove(index);
                             }
                             Serializator.writeToFileEmployees(DeliveryService.observers,"employees.txt");
-                            pendingOrders.remove(order);
+                            //pendingOrders.remove(order);
+
                             obs.remove(order);
                             tableView.refresh();
+
+                        });
+                    }
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(newButton);
+                        }
+                    }
+                };
+            }
+        };
+        buttons.setCellFactory(cellFactory);
+        tableView.getColumns().add(buttons);
+    }
+    public  void  addButtonsView(TableView tableView)
+    {
+        TableColumn<Order, Void> buttons = new TableColumn<>("View");
+        Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<Order, Void> call(final TableColumn<Order, Void> param) {
+                return new TableCell<>() {
+                    private final Button newButton = new Button("View");
+                    {
+                        ClientController.styleButton(newButton);
+                        newButton.setOnAction((ActionEvent event) -> {
+
+                            Order order = getTableView().getItems().get(getIndex());
+                            int index=0;
+                            for(int i=0;i<pendingOrders.size();i++){
+                                if(pendingOrders.get(i).getOrderID()==order.getOrderID()){
+                                    index=i;
+                                }
+                            }
+                            new ViewItems(index,pendingItems);
 
                         });
                     }
