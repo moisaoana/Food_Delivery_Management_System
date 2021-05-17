@@ -40,6 +40,9 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         }
         orders=Deserializator.loadInfoOrders();
     }
+    public boolean isWellFormed(){
+        return listOfUsers!=null;
+    }
     public void addListener(PropertyChangeListener propertyChangeListener) {
         propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
     }
@@ -58,6 +61,7 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
 
     @Override
     public void loadBaseProducts(){
+        assert isWellFormed();
         allBaseProducts.clear();
         allMenuItems.clear();
         try (Stream<String> stream = Files.lines(Paths.get( "products.csv"))) {
@@ -68,10 +72,12 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         allMenuItems.addAll(allBaseProducts);
         Serializator.writeToFileSet(allMenuItems,"menuitems.txt");
         assert !allBaseProducts.isEmpty() && !allMenuItems.isEmpty();
+        assert isWellFormed();
     }
 
     @Override
     public  CompositeProduct addNewCompositeItem(ObservableList<MenuItem> menuItems,String name) {
+        assert isWellFormed();
         assert  menuItems.size()>0 && name!=null;
         int oldSize=allMenuItems.size();
         CompositeProduct compositeProduct=new CompositeProduct(name);
@@ -83,45 +89,56 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         allMenuItems.add(compositeProduct);
         Serializator.writeToFileSet(DeliveryService.allMenuItems,"menuitems.txt");
         assert allMenuItems.size()==oldSize+1;
+        assert isWellFormed();
         return compositeProduct;
+
     }
 
     @Override
     public void addNewBaseProduct(BaseProduct baseProduct) {
+        assert isWellFormed();
         assert baseProduct!=null;
         int preSize=DeliveryService.allMenuItems.size();
         DeliveryService.allMenuItems.add(baseProduct);
         Serializator.writeToFileSet(DeliveryService.allMenuItems,"menuitems.txt");
         assert allMenuItems.size()==preSize+1 && allMenuItems.contains(baseProduct);
+        assert isWellFormed();
     }
 
     @Override
     public void removeProduct(MenuItem menuItem) {
+        assert isWellFormed();
         assert menuItem!=null && allMenuItems.size()>0 && allMenuItems.contains(menuItem);
         int oldSize=allMenuItems.size();
         DeliveryService.allMenuItems.remove(menuItem);
         Serializator.writeToFileSet(DeliveryService.allMenuItems,"menuitems.txt");
         assert allMenuItems.size() ==oldSize - 1 && !allMenuItems.contains(menuItem);
+        assert isWellFormed();
     }
 
     @Override
     public void modifyProductDelete(MenuItem menuItemOld) {
+        assert isWellFormed();
         assert menuItemOld!=null && allMenuItems.contains(menuItemOld);
         int oldSize=allMenuItems.size();
         DeliveryService.allMenuItems.remove(menuItemOld);
         assert !allMenuItems.contains(menuItemOld) && allMenuItems.size()==oldSize-1;
+        assert isWellFormed();
     }
     @Override
     public void modifyProductAdd( MenuItem menuItemNew) {
+        assert isWellFormed();
         assert menuItemNew!=null;
         int oldSize=allMenuItems.size();
         DeliveryService.allMenuItems.add(menuItemNew);
         Serializator.writeToFileSet(DeliveryService.allMenuItems,"menuitems.txt");
         assert allMenuItems.contains(menuItemNew) && allMenuItems.size()==oldSize+1;
+        assert isWellFormed();
     }
 
     @Override
     public void search(ObservableList<MenuItem> menuItems, TableView<MenuItem> tableView, TextField ratingTF,TextField caloriesTF, TextField proteinTF, TextField fatTF, TextField sodiumTF, TextField priceTF, TextField titleTF) {
+        assert isWellFormed();
         ObservableList<MenuItem>selectedItemsObservable= FXCollections.observableArrayList();
         List<MenuItem>selectedItems;
         selectedItems= menuItems.stream().filter(product-> product instanceof BaseProduct)
@@ -136,11 +153,13 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
        selectedItemsObservable.addAll(selectedItems);
        tableView.setItems(selectedItemsObservable);
        tableView.refresh();
+        assert isWellFormed();
 
     }
 
     @Override
     public void searchComposite(ObservableList<MenuItem> menuItems, TableView<MenuItem> tableView, TextField titleTF, TextField priceTF) {
+        assert isWellFormed();
         ObservableList<MenuItem>selectedItemsObservable= FXCollections.observableArrayList();
         List<MenuItem>selectedItems;
         selectedItems= menuItems.stream().filter(product-> product instanceof CompositeProduct)
@@ -150,10 +169,12 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         selectedItemsObservable.addAll(selectedItems);
         tableView.setItems(selectedItemsObservable);
         tableView.refresh();
+        assert isWellFormed();
     }
 
     @Override
     public void createBill(ObservableList<MenuItem> menuItems, User user,Date date) {
+        assert isWellFormed();
         assert !menuItems.isEmpty() && user!=null && date!=null;
         try {
             FileWriter fileWriter1 = new FileWriter("bill.txt",false);
@@ -177,10 +198,12 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         }catch (IOException e) {
             e.printStackTrace();
         }
+        assert isWellFormed();
     }
 
     @Override
     public void generateReport1(int startHour, int endHour) {
+        assert isWellFormed();
         assert startHour>0 && endHour<24 && startHour<endHour;
         try {
             FileWriter fileWriter = new FileWriter("report.txt",false);
@@ -190,11 +213,13 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
             e.printStackTrace();
         }
         orders.entrySet().stream().filter(entry->entry.getKey().getOrderDate().getHour()>=startHour && entry.getKey().getOrderDate().getHour()<endHour)
-                                 .forEach(entry->writeOrderToFile(entry.getKey(),entry.getValue()));
+                                 .forEach(entry-> sample.dataLayer.FileWriter.writeOrderToFile(entry.getKey(),entry.getValue()));
+        assert isWellFormed();
     }
 
     @Override
     public void generateReport2(int number) {
+        assert isWellFormed();
         assert number>=0;
         try {
             FileWriter fileWriter = new FileWriter("report.txt",false);
@@ -207,11 +232,14 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         List<MenuItem>menuItemsUnique;
         orders.values().stream().forEach(allItems::addAll);
         menuItemsUnique=allItems.stream().distinct().collect(Collectors.toList());
-        menuItemsUnique.stream().forEach((i)->{long c=allItems.stream().filter(p->p.equals(i)).count();if(c>=number)writeReport4(i,c);});
+        menuItemsUnique.stream().forEach((i)->{long c=allItems.stream().filter(p->p.equals(i)).count();if(c>=number)
+            sample.dataLayer.FileWriter.writeReport4(i,c);});
+        assert isWellFormed();
     }
 
     @Override
     public void generateReport3(int nrOfOrders, double sum) {
+        assert isWellFormed();
         assert nrOfOrders>=0 &&  sum>0;
         try {
             FileWriter fileWriter = new FileWriter("report.txt",false);
@@ -222,11 +250,14 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         }
         List<Integer> clientsUnique;
         clientsUnique=orders.entrySet().stream().filter(e->computeOrderTotal(e.getValue())>sum).map(Map.Entry::getKey).map(Order::getClientID).distinct().collect(Collectors.toList());
-        clientsUnique.stream().forEach((i)->{long c= orders.keySet().stream().map(Order::getClientID).filter(id->id.equals(i)).count();if(c>=nrOfOrders)writeReport3(i,c);});
+        clientsUnique.stream().forEach((i)->{long c= orders.keySet().stream().map(Order::getClientID).filter(id->id.equals(i)).count();if(c>nrOfOrders)
+            sample.dataLayer.FileWriter.writeReport3(i,c);});
+        assert isWellFormed();
     }
 
     @Override
     public void generateReport4(int day,int month,int year) {
+        assert isWellFormed();
         assert day>0 && day<32 && month>0 && month<13;
         try {
             FileWriter fileWriter = new FileWriter("report.txt",false);
@@ -241,12 +272,15 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
                 .map(Map.Entry::getValue)
                 .forEach(menuItemsLocal::addAll);
         menuItemsUnique=menuItemsLocal.stream().distinct().collect(Collectors.toList());
-        menuItemsUnique.stream().forEach((i)->{long c=menuItemsLocal.stream().filter(p->p.equals(i)).count();writeReport4(i,c);});
+        menuItemsUnique.stream().forEach((i)->{long c=menuItemsLocal.stream().filter(p->p.equals(i)).count();
+            sample.dataLayer.FileWriter.writeReport4(i,c);});
+        assert isWellFormed();
 
     }
 
     @Override
     public double computeOrderTotal(ArrayList<MenuItem> menuItems) {
+        assert isWellFormed();
         assert !menuItems.isEmpty();
         double sum=0;
         for(MenuItem menuItem: menuItems){
@@ -257,10 +291,12 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
             }
         }
         assert sum!=0;
+        assert isWellFormed();
         return sum;
     }
     @Override
     public Date makeAnOrder(ObservableList<MenuItem> orderedItems, User user) {//not done
+        assert isWellFormed();
         int orderId = generateOrderId();
         LocalDate localDate = LocalDate.now();
         LocalTime localTime= LocalTime.now();
@@ -273,62 +309,32 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
             setAlert(newOrder);
             setAlert2(listOfOrderedItems);
         }
+        assert isWellFormed();
         return date;
 
     }
     @Override
     public int generateOrderId(){
+        assert isWellFormed();
         if(orders.size()==0){
+            assert isWellFormed();
             return 1;
         }else{
+            assert isWellFormed();
             return orders.size()+1;
         }
+
     }
 
-    private void writeOrderToFile(Order order, ArrayList<MenuItem>menuItems){
-        try {
-            FileWriter fileWriter = new FileWriter("report.txt",true);
-            fileWriter.write("Order ID: "+order.getOrderID()+"\n");
-            fileWriter.write("Date: "+order.getOrderDate().getDay()+"."+order.getOrderDate().getMonth()+"."+order.getOrderDate().getYear()+" "+order.getOrderDate().getHour()+":"+order.getOrderDate().getMinutes()+":"+order.getOrderDate().getSeconds()+"\n");
-            fileWriter.write("Client: "+order.getClientID()+"\nProducts: ");
-            int total=0;
-            for(MenuItem menuItem:menuItems){
-                if(menuItem instanceof BaseProduct) {
-                    fileWriter.write(((BaseProduct) menuItem).getTitle() + ", ");
-                    total+=((BaseProduct) menuItem).getPrice();
-                }else if(menuItem instanceof CompositeProduct) {
-                    fileWriter.write(((CompositeProduct) menuItem).getTitle() + ", ");
-                    total+=((CompositeProduct) menuItem).getPrice();
+    @Override
+    public void modifyCompositeItem(String string,CompositeProduct menuItem) {
+        for(MenuItem m:DeliveryService.allMenuItems){
+            if(m instanceof CompositeProduct){
+                if(((CompositeProduct) m).getTitle().equals(((CompositeProduct) menuItem).getTitle())){
+                    ((CompositeProduct) m).setTitle(string);
                 }
             }
-            fileWriter.write("\nTotal: "+total+"\n");
-            fileWriter.close();
-        }catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    private void writeReport4(MenuItem menuItem, long nr){
-        try {
-            FileWriter fileWriter = new FileWriter("report.txt",true);
-            if(menuItem instanceof BaseProduct) {
-                fileWriter.write(((BaseProduct) menuItem).getTitle()+", ordered "+nr+" times\n");
-            }else if(menuItem instanceof CompositeProduct){
-                fileWriter.write(((CompositeProduct) menuItem).getTitle()+", ordered "+nr+" times\n");
-            }
-            fileWriter.close();
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    private void writeReport3(int i, long nr){
-        try {
-            FileWriter fileWriter = new FileWriter("report.txt",true);
-            Optional<User> client=listOfUsers.stream().filter(u->u.getID()==i).findFirst();
-            fileWriter.write(client.get().getUsername()+" ordered "+nr+" times\n");
-            fileWriter.close();
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

@@ -113,6 +113,7 @@ public class RegisterController {
                 if(newUser.getType().equals("Employee")){
                   EmployeeController employeeController=new EmployeeController(newUser);
                   DeliveryService.observers.add(employeeController);
+                  //????
                   main.deliveryService.addListener(employeeController);
                   Serializator.writeToFileEmployees(DeliveryService.observers,"employees.txt");
                 }

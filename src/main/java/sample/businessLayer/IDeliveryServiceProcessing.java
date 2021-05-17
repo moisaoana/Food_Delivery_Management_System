@@ -154,5 +154,5 @@ public interface IDeliveryServiceProcessing {
      */
      int generateOrderId();
 
-
+    void modifyCompositeItem(String string,CompositeProduct menuItem);
 }

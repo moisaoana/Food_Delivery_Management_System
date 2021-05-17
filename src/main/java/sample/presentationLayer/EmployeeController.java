@@ -24,25 +24,20 @@ import java.util.List;
 
 public class EmployeeController extends Stage implements PropertyChangeListener, Serializable {
     private User user;
-    //private Order alert;
     private List<Order> pendingOrders= new ArrayList<>();
     private List<ArrayList<MenuItem>>pendingItems=new ArrayList<>();
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //this.setAlert((Order) evt.getNewValue());
-        //System.out.println(alert.getOrderID());
         if(evt.getNewValue() instanceof Order)
             pendingOrders.add((Order)evt.getNewValue());
         else if(evt.getNewValue() instanceof ArrayList)
             pendingItems.add((ArrayList<MenuItem>) evt.getNewValue());
-       // pendingItems.add((ArrayList<MenuItem>) evt.getNewValue());
         Serializator.writeToFileEmployees(DeliveryService.observers,"employees.txt");
     }
 
     public EmployeeController(User user){
         this.user=user;
-
     }
     public void showScene(){
         TableView<Order> tableView=new TableView<>();
@@ -66,17 +61,6 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
         this.show();
 
     }
-    /*
-
-    public Order getAlert() {
-        return alert;
-    }
-
-    public void setAlert(Order alert) {
-        this.alert = alert;
-    }
-
-     */
 
     public User getUser() {
         return user;
@@ -104,14 +88,11 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
                                     index=i;
                                 }
                             }
-                           // pendingItems.remove(index);
                             for(EmployeeController employeeController:DeliveryService.observers){
                                 employeeController.pendingOrders.remove(order);
                                 employeeController.pendingItems.remove(index);
                             }
                             Serializator.writeToFileEmployees(DeliveryService.observers,"employees.txt");
-                            //pendingOrders.remove(order);
-
                             obs.remove(order);
                             tableView.refresh();
 
@@ -152,7 +133,6 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
                                 }
                             }
                             new ViewItems(index,pendingItems);
-
                         });
                     }
                     @Override

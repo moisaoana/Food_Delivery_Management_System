@@ -13,6 +13,7 @@ import sample.businessLayer.BaseProduct;
 import sample.businessLayer.CompositeProduct;
 import sample.businessLayer.DeliveryService;
 import sample.businessLayer.MenuItem;
+import sample.dataLayer.Serializator;
 import sample.start.Main;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -178,24 +179,38 @@ public class AdministratorController implements Initializable {
             new ErrorMessage("Please fill all the required information!");
         }else {
             String title=addTitleTextField.getText();
-            try {
-                double rating = Double.parseDouble(addRatingTextField.getText());
-                int calories = Integer.parseInt(addCaloriesTextField.getText());
-                int protein = Integer.parseInt(addProteinTextField.getText());
-                int fat = Integer.parseInt(addFatTextField.getText());
-                int sodium = Integer.parseInt(addSodiumTextField.getText());
-                double price = Double.parseDouble(addPriceTextField.getText());
-                BaseProduct baseProduct = new BaseProduct(title, rating, calories, protein, fat, sodium, price);
-                if(exits(baseProduct)){
-                    new ErrorMessage("This product already exists!");
-                }else {
-                    main.deliveryService.modifyProductAdd(baseProduct);
-                    observableListMenu.addAll(baseProduct);
-                    menuTableView.refresh();
-                    clearAll();
+            if(addCaloriesTextField.getText().equals("-")) {
+                CompositeProduct compositeProduct=new CompositeProduct(title);
+                compositeProduct.getProductsList().addAll(observableListChosenItems);
+                compositeProduct.setPrice(compositeProduct.computePrice());
+                compositeProduct.setPrintableList();
+                DeliveryService.allMenuItems.add(compositeProduct);
+                observableListMenu.add(compositeProduct);
+                menuTableView.refresh();
+                clearAll();
+                observableListChosenItems.clear();
+                Serializator.writeToFileSet(DeliveryService.allMenuItems,"menuitems.txt");
+            }else {
+                try {
+                    double rating = Double.parseDouble(addRatingTextField.getText());
+                    int calories = Integer.parseInt(addCaloriesTextField.getText());
+                    int protein = Integer.parseInt(addProteinTextField.getText());
+                    int fat = Integer.parseInt(addFatTextField.getText());
+                    int sodium = Integer.parseInt(addSodiumTextField.getText());
+                    double price = Double.parseDouble(addPriceTextField.getText());
+                    BaseProduct baseProduct = new BaseProduct(title, rating, calories, protein, fat, sodium, price);
+                    if (exits(baseProduct)) {
+                        new ErrorMessage("This product already exists!");
+                    } else {
+                        main.deliveryService.modifyProductAdd(baseProduct);
+                        observableListMenu.addAll(baseProduct);
+                        menuTableView.refresh();
+                        clearAll();
+                        Serializator.writeToFileSet(DeliveryService.allMenuItems,"menuitems.txt");
+                    }
+                } catch (NumberFormatException numberFormatException) {
+                    new ErrorMessage("Invalid data!");
                 }
-            }catch (NumberFormatException numberFormatException) {
-                new ErrorMessage("Invalid data!");
             }
         }
     }
@@ -370,6 +385,14 @@ public class AdministratorController implements Initializable {
             addProteinTextField.setText(Integer.toString(((BaseProduct) menuItem).getProtein()));
             addCaloriesTextField.setText(Integer.toString(((BaseProduct) menuItem).getCalories()));
             addRatingTextField.setText(Double.toString(((BaseProduct) menuItem).getRating()));
+        }else if(menuItem instanceof CompositeProduct){
+            addTitleTextField.setText(((CompositeProduct) menuItem).getTitle());
+            addPriceTextField.setText("-");
+            addSodiumTextField.setText("-");
+            addFatTextField.setText("-");
+            addProteinTextField.setText("-");
+            addCaloriesTextField.setText("-");
+            addRatingTextField.setText("-");
         }
     }
     public void  modifyButtons(TableView<MenuItem> tableView)
@@ -389,6 +412,14 @@ public class AdministratorController implements Initializable {
                                 observableListMenu.remove(data);
                                 observableListChosenItems.remove(data);
                                 chosenItemsTableView.refresh();
+                            }else if(data instanceof  CompositeProduct){
+                                fillTextFields(data);
+                                observableListChosenItems.clear();
+                                observableListChosenItems.addAll(((CompositeProduct) data).getProductsList());
+                                chosenItemsTableView.refresh();
+                                observableListMenu.remove(data);
+                                DeliveryService.allMenuItems.remove(data);
+                                menuTableView.refresh();
                             }
                         });
                     }
