@@ -79,12 +79,14 @@ public class LoginController {
         emptyPasswordLabel.setVisible(false);
         emptyUsernameLabel.setVisible(false);
     }
-
+    private void setNotVisible(){
+        emptyUsernameLabel.setVisible(false);
+        emptyPasswordLabel.setVisible(false);
+    }
     @FXML
     void clickLogin(ActionEvent event) {
         boolean found=false;
-        emptyUsernameLabel.setVisible(false);
-        emptyPasswordLabel.setVisible(false);
+        setNotVisible();
         if(usernameTextfield.getText().isEmpty()){
             if(passwordTextfield.getText().isEmpty()){
                 emptyPasswordLabel.setVisible(true);
@@ -94,13 +96,11 @@ public class LoginController {
             emptyPasswordLabel.setVisible(true);
         }else{
             for(User user: DeliveryService.listOfUsers){
-                System.out.println(user.getUsername());
                 if(user.getUsername().equals(usernameTextfield.getText())){
                     if(user.getPassword().equals(passwordTextfield.getText())){
                         if(user.getType().equals("Client")){
                             Scene clientScene=initializeClientScene(user);
                             main.setScene(clientScene);
-
                         }else if(user.getType().equals("Administrator")){
                             main.setScene(adminScene);
                         }else{

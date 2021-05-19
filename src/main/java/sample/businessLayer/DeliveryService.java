@@ -40,9 +40,11 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         }
         orders=Deserializator.loadInfoOrders();
     }
+
     public boolean isWellFormed(){
         return listOfUsers!=null;
     }
+
     public void addListener(PropertyChangeListener propertyChangeListener) {
         propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
     }
@@ -50,10 +52,12 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
     public void removeListener(PropertyChangeListener propertyChangeListener) {
         propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
     }
+
     public void setAlert(Order order) {
         propertyChangeSupport.firePropertyChange("alert", this.alert, order);
         this.alert = order;
     }
+
     public void setAlert2(ArrayList<MenuItem> list){
         propertyChangeSupport.firePropertyChange("alert2", this.alert2, list);
         this.alert2=list;
@@ -328,6 +332,10 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
 
     @Override
     public void modifyCompositeItem(String string,CompositeProduct menuItem) {
+        assert isWellFormed();
+        assert string!=null && !string.isEmpty();
+        assert allMenuItems.size()>0 && allMenuItems.contains(menuItem);
+        int oldSize=allMenuItems.size();
         for(MenuItem m:DeliveryService.allMenuItems){
             if(m instanceof CompositeProduct){
                 if(((CompositeProduct) m).getTitle().equals(((CompositeProduct) menuItem).getTitle())){
@@ -335,6 +343,8 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
                 }
             }
         }
+        assert allMenuItems.size()==oldSize+1;
+        assert isWellFormed();
     }
 
 }

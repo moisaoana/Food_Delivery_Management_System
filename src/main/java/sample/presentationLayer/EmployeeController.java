@@ -59,7 +59,6 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
         this.setTitle("Pending Orders");
         this.setScene(scene);
         this.show();
-
     }
 
     public User getUser() {
@@ -80,7 +79,6 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
                     {
                         ClientController.styleButton(newButton);
                         newButton.setOnAction((ActionEvent event) -> {
-
                             Order order = getTableView().getItems().get(getIndex());
                             int index=0;
                             for(int i=0;i<pendingOrders.size();i++){
@@ -95,7 +93,6 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
                             Serializator.writeToFileEmployees(DeliveryService.observers,"employees.txt");
                             obs.remove(order);
                             tableView.refresh();
-
                         });
                     }
                     @Override

@@ -80,12 +80,14 @@ public class RegisterController {
         emptyPasswordLabel.setVisible(false);
         chooseType.setValue("Client");
     }
-
+    private void setNotVisible(){
+        emptyPasswordLabel.setVisible(false);
+        emptyUsernameLabel.setVisible(false);
+    }
     @FXML
     void clickRegister(ActionEvent event) {
         boolean uniqueUser=true;
-        emptyPasswordLabel.setVisible(false);
-        emptyUsernameLabel.setVisible(false);
+        setNotVisible();
         if(usernameTextfield.getText().isEmpty()){
             emptyUsernameLabel.setVisible(true);
         }else if(passwordTextfield.getText().isEmpty()){
@@ -113,7 +115,6 @@ public class RegisterController {
                 if(newUser.getType().equals("Employee")){
                   EmployeeController employeeController=new EmployeeController(newUser);
                   DeliveryService.observers.add(employeeController);
-                  //????
                   main.deliveryService.addListener(employeeController);
                   Serializator.writeToFileEmployees(DeliveryService.observers,"employees.txt");
                 }

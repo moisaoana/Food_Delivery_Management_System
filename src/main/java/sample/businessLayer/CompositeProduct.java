@@ -11,7 +11,6 @@ public class CompositeProduct extends MenuItem{
     public CompositeProduct(String name) {
         this.title = name;
     }
-
     public void  addProduct(MenuItem menuItem){
         productsList.add(menuItem);
     }
