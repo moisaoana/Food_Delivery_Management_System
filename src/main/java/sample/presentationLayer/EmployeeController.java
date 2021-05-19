@@ -64,7 +64,6 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
     public User getUser() {
         return user;
     }
-
     public void setUser(User user) {
         this.user = user;
     }
@@ -73,7 +72,7 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
         TableColumn<Order, Void> buttons = new TableColumn<>("Done");
         Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<>() {
             @Override
-            public TableCell<Order, Void> call(final TableColumn<Order, Void> param) {
+            public TableCell<Order, Void> call(final TableColumn<Order, Void> p) {
                 return new TableCell<>() {
                     private final Button newButton = new Button("Done");
                     {
@@ -115,13 +114,12 @@ public class EmployeeController extends Stage implements PropertyChangeListener,
         TableColumn<Order, Void> buttons = new TableColumn<>("View");
         Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<>() {
             @Override
-            public TableCell<Order, Void> call(final TableColumn<Order, Void> param) {
+            public TableCell<Order, Void> call(final TableColumn<Order, Void> p) {
                 return new TableCell<>() {
                     private final Button newButton = new Button("View");
                     {
                         ClientController.styleButton(newButton);
                         newButton.setOnAction((ActionEvent event) -> {
-
                             Order order = getTableView().getItems().get(getIndex());
                             int index=0;
                             for(int i=0;i<pendingOrders.size();i++){

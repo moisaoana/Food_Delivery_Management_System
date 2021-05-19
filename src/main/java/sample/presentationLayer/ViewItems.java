@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import sample.businessLayer.BaseProduct;
 import sample.businessLayer.CompositeProduct;
 import sample.businessLayer.MenuItem;
-
 import java.util.ArrayList;
 import java.util.List;
 

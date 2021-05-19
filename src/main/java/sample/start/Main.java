@@ -7,11 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.businessLayer.DeliveryService;
 import sample.presentationLayer.*;
-
 import java.io.File;
 import java.net.URL;
-
-
 
 public class Main extends Application {
     Stage window;

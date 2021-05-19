@@ -183,7 +183,7 @@ public class ClientController  implements Initializable {
         TableColumn<MenuItem, Void> buttons = new TableColumn<>("Order");
         Callback<TableColumn<MenuItem, Void>, TableCell<MenuItem, Void>> cellFactory = new Callback<>() {
             @Override
-            public TableCell<MenuItem, Void> call(final TableColumn<MenuItem, Void> param) {
+            public TableCell<MenuItem, Void> call(final TableColumn<MenuItem, Void> p) {
                 return new TableCell<>() {
                     private final Button newButton = new Button("+");{
                         styleButton(newButton);
@@ -241,7 +241,7 @@ public class ClientController  implements Initializable {
         TableColumn<MenuItem, Void> buttons = new TableColumn<>("Remove");
         Callback<TableColumn<MenuItem, Void>, TableCell<MenuItem, Void>> cellFactory = new Callback<>() {
             @Override
-            public TableCell<MenuItem, Void> call(final TableColumn<MenuItem, Void> param) {
+            public TableCell<MenuItem, Void> call(final TableColumn<MenuItem, Void> p) {
                 return new TableCell<>() {
                     private final Button newButton = new Button("-");
                     {

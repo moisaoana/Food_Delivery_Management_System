@@ -1,0 +1,6 @@
+Order bill
+Date: 19.5.2021 15:25:38
+Client: client2
+Products:
+Spice-Rubbed Duck Legs Braised with Green Olives and Carrots , Price: 46.0
+Total: 46.0 RON

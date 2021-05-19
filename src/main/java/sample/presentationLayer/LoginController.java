@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import sample.start.Main;
 import sample.businessLayer.DeliveryService;
 import sample.businessLayer.User;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
