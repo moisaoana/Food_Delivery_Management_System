@@ -236,7 +236,7 @@ public class DeliveryService implements  IDeliveryServiceProcessing{
         List<MenuItem>menuItemsUnique;
         orders.values().stream().forEach(allItems::addAll);
         menuItemsUnique=allItems.stream().distinct().collect(Collectors.toList());
-        menuItemsUnique.stream().forEach((i)->{long c=allItems.stream().filter(p->p.equals(i)).count();if(c>=number)
+        menuItemsUnique.stream().forEach((i)->{long c=allItems.stream().filter(p->p.equals(i)).count();if(c>number)
             sample.dataLayer.FileWriter.writeReport4(i,c);});
         assert isWellFormed();
     }

@@ -44,6 +44,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.23</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.2.0</version>
+            <type>maven-plugin</type>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -53,6 +59,38 @@
                 <version>0.0.1</version>
                 <configuration>
                     <mainClass>HelloFX</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <tags>
+                            <tag>
+                                <name>pre</name>
+                                <placement>a</placement>
+                                <head>Preconditions:</head>
+                            </tag>
+                        <tag>
+                            <name>post</name>
+                            <placement>a</placement>
+                            <head>Postconditions:</head>
+                        </tag>
+                        <tag>
+                            <name>invariant</name>
+                            <placement>a</placement>
+                            <head>Invariant:</head>
+                        </tag>
+
+                    </tags>
                 </configuration>
             </plugin>
         </plugins>

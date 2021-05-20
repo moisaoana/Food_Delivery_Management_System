@@ -1,6 +1,8 @@
 Order bill
-Date: 19.5.2021 15:25:38
+Date: 20.5.2021 16:27:54
 Client: client2
 Products:
-Spice-Rubbed Duck Legs Braised with Green Olives and Carrots , Price: 46.0
-Total: 46.0 RON
+Coconut Rice , Price: 41.0
+Special Menu 1, Price: 96.0
+Scallops with Tarragon Cream and Wilted Butter Lettuce , Price: 30.0
+Total: 167.0 RON
